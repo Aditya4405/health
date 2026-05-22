@@ -1,4 +1,4 @@
-import type { Config } from 'tailwindcss';
+﻿import type { Config } from 'tailwindcss';
 
 const config: Config = {
   darkMode: ['class'],
@@ -20,7 +20,7 @@ const config: Config = {
         normal: 'var(--color-normal)',
       },
       fontFamily: {
-        display: ['Poppins', 'sans-serif'],
+        display: ['Plus Jakarta Sans', 'sans-serif'],
         body: ['Inter', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
@@ -54,4 +54,5 @@ const config: Config = {
 };
 
 export default config;
+
 
