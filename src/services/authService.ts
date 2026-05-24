@@ -63,6 +63,7 @@ export const authService = {
           user: {
             ...demo.user,
             name: payload.name,
+            specialty: payload.role === 'DOCTOR' ? payload.doctorProfile?.specialization || demo.user.specialty : demo.user.specialty,
             avatarInitials: payload.name
               .split(' ')
               .slice(0, 2)
