@@ -28,10 +28,9 @@ export interface NavItem {
 export const getNavItemsByRole = (role: Role): NavItem[] => {
   const patientItems: NavItem[] = [
     { label: 'Dashboard', path: '/app/patient/dashboard', icon: LayoutDashboard },
-    { label: 'My Reports', path: '/app/patient/reports', icon: FileText },
-    { label: 'Upload Report', path: '/app/patient/upload', icon: UploadCloud },
-    { label: 'Find Doctors', path: '/app/patient/doctors', icon: Search },
-    { label: 'Chat Assistant', path: '/app/patient/chat', icon: Bot },
+    { label: 'Reports', path: '/app/patient/reports', icon: FileText },
+    { label: 'Doctors', path: '/app/patient/doctors', icon: Search },
+    { label: 'Assistant', path: '/app/patient/chat', icon: Bot },
     { label: 'Settings', path: '/app/patient/settings', icon: Settings },
   ];
 
