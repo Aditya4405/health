@@ -12,7 +12,7 @@ export const ThemeToggle = () => {
       variant="ghost"
       aria-label="Toggle theme"
       onClick={toggleTheme}
-      className="text-[#355772] dark:text-[#cde2f5]"
+      className="rounded-full border border-[var(--portal-border)] bg-[var(--portal-elevated)] text-[var(--portal-muted)] hover:-translate-y-0.5 hover:bg-[var(--portal-surface)] hover:text-[var(--portal-text)]"
     >
       {theme === 'light' ? <MoonStar className="h-5 w-5" /> : <SunMedium className="h-5 w-5" />}
     </Button>
