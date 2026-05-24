@@ -1,111 +1,223 @@
-import { ShieldCheck, UserCircle2, Bell, CreditCard, MoonStar } from 'lucide-react';
+import type { ReactNode } from 'react';
+import { Bell, CreditCard, MoonStar, ShieldCheck, UserCircle2, ArrowRight, Sparkles } from 'lucide-react';
 import { DashboardLayout } from '@/layouts/DashboardLayout';
 import { PageTransition } from '@/components/common/PageTransition';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { useTheme } from '@/context/ThemeContext';
 import { usePageTitle } from '@/hooks/usePageTitle';
+import { cn } from '@/utils/cn';
 
 export const UserSettingsPage = () => {
   usePageTitle('Settings');
-
   const { theme, toggleTheme } = useTheme();
 
   return (
     <DashboardLayout title="Settings">
       <PageTransition>
-        <div className="grid gap-5 xl:grid-cols-2">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <UserCircle2 className="h-5 w-5 text-primary" /> Profile Settings
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <Input placeholder="Full name" defaultValue="Aarav Kapoor" />
-              <Input placeholder="Email" defaultValue="patient@mediscan.ai" />
-              <Input placeholder="Phone" defaultValue="+91 98765 43210" />
-              <Button>Save Profile</Button>
-            </CardContent>
-          </Card>
+        <div className="mx-auto max-w-4xl space-y-6 px-4 py-6 text-[var(--portal-text)]">
+          
+          {/* Header */}
+          <div className="pb-4 border-b border-[var(--portal-border)]">
+            <h2 className="font-display text-lg font-bold tracking-tight text-[var(--portal-text)]">Preferences</h2>
+            <p className="text-[10px] text-[var(--portal-muted)] font-medium">Manage your personal healthcare profile account logs and companion preferences</p>
+          </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Bell className="h-5 w-5 text-teal" /> Notifications
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <SettingRow label="Critical health alerts" />
-              <SettingRow label="Report analysis completion" defaultChecked />
-              <SettingRow label="Consultation reminders" defaultChecked />
-              <SettingRow label="Marketing updates" />
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <CreditCard className="h-5 w-5 text-purple" /> Subscription
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="rounded-md border border-[#dbe8f4] bg-[#f4f9fd] p-4">
-                <p className="font-display text-lg font-semibold">Pro Plan</p>
-                <p className="text-sm text-[#60758a]">?299/mo • Renews on 20 May 2026</p>
-                <Badge className="mt-2" variant="teal">
-                  Active
-                </Badge>
+          {/* Account Profile Section */}
+          <section className="grid gap-6 md:grid-cols-[1fr_260px]">
+            {/* Form */}
+            <article className="app-card p-6 shadow-sm space-y-5">
+              <div>
+                <span className="text-[9px] font-semibold uppercase tracking-wider text-[var(--portal-muted)]">Account details</span>
+                <h3 className="font-display text-base font-bold tracking-tight text-[var(--portal-text)] mt-0.5">Personal Profile</h3>
               </div>
-              <div className="grid grid-cols-2 gap-2">
-                <Button variant="secondary">Change Plan</Button>
-                <Button variant="outline">Manage Billing</Button>
-              </div>
-            </CardContent>
-          </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <ShieldCheck className="h-5 w-5 text-[#1d9e75]" /> Security & Appearance
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between rounded-md border border-[#dbe8f4] p-3">
-                <div>
-                  <p className="font-medium">Two-factor authentication</p>
-                  <p className="text-sm text-[#60758a]">Protect your account with OTP verification.</p>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-1">
+                  <label className="text-[9px] font-semibold uppercase tracking-wider text-[var(--portal-muted)] ml-1">Full Name</label>
+                  <Input placeholder="Full name" defaultValue="Aarav Kapoor" className="h-10 rounded-xl bg-[var(--portal-surface)] border-[var(--portal-border)] text-xs text-[var(--portal-text)] animate-none focus-visible:ring-0" />
                 </div>
-                <Switch />
+                <div className="space-y-1">
+                  <label className="text-[9px] font-semibold uppercase tracking-wider text-[var(--portal-muted)] ml-1">Email Address</label>
+                  <Input placeholder="Email" defaultValue="patient@mediscan.ai" className="h-10 rounded-xl bg-[var(--portal-surface)] border-[var(--portal-border)] text-xs text-[var(--portal-text)] animate-none focus-visible:ring-0" />
+                </div>
+                <div className="space-y-1 sm:col-span-2">
+                  <label className="text-[9px] font-semibold uppercase tracking-wider text-[var(--portal-muted)] ml-1">Phone Number</label>
+                  <Input placeholder="Phone" defaultValue="+91 98765 43210" className="h-10 rounded-xl bg-[var(--portal-surface)] border-[var(--portal-border)] text-xs text-[var(--portal-text)] animate-none focus-visible:ring-0" />
+                </div>
               </div>
 
-              <div className="flex items-center justify-between rounded-md border border-[#dbe8f4] p-3">
-                <div className="inline-flex items-center gap-2">
-                  <MoonStar className="h-5 w-5 text-[#60758a]" />
-                  <div>
-                    <p className="font-medium">Dark mode</p>
-                    <p className="text-sm text-[#60758a]">Current: {theme}</p>
-                  </div>
-                </div>
-                <Button variant="secondary" onClick={toggleTheme}>
-                  Toggle
+              <div className="pt-2 flex gap-3">
+                <Button className="btn-premium-primary h-10 rounded-xl px-5 text-xs font-semibold tracking-wide">
+                  Save Changes
+                </Button>
+                <Button variant="ghost" className="h-10 rounded-xl px-5 text-xs font-semibold tracking-wide text-[var(--portal-muted)] hover:bg-[var(--portal-elevated)] transition-all">
+                  Cancel
                 </Button>
               </div>
-            </CardContent>
-          </Card>
+            </article>
+
+            {/* Completion indicator */}
+            <article className="app-card p-6 shadow-sm flex flex-col items-center justify-between text-center relative overflow-hidden">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(14,165,233,0.04),transparent_60%)] pointer-events-none" />
+              <p className="text-[9px] font-semibold uppercase tracking-wider text-[var(--portal-muted)]">Completion Status</p>
+              
+              <div className="my-3">
+                <CompletionRing progress={82} />
+              </div>
+              
+              <div className="space-y-2">
+                <p className="text-[10px] text-[var(--portal-muted)] font-medium leading-relaxed">
+                  Provide emergency contact history to complete security verification.
+                </p>
+                <Badge className="border border-[var(--portal-border)] bg-[var(--portal-elevated)] text-[var(--portal-muted)] text-[9px] font-bold tracking-wide uppercase px-2.5 py-0.5 rounded-full">Pro Account</Badge>
+              </div>
+            </article>
+          </section>
+
+          {/* Preferences Settings (Apple/Notion style list rows) */}
+          <section className="grid gap-6 md:grid-cols-2">
+            
+            {/* System Notifications preferences */}
+            <article className="app-card p-6 md:p-8 shadow-sm space-y-4">
+              <div className="flex items-center gap-2 pb-2 border-b border-[var(--portal-border)]">
+                <Bell className="h-4 w-4 text-[#0ea5e9]" />
+                <h3 className="font-display text-sm font-bold tracking-tight text-[var(--portal-text)]">System Alerts</h3>
+              </div>
+              <div className="divide-y divide-[var(--portal-border)]">
+                <SettingRow label="Critical health indicators" description="Alerts for critical biomarker variances." />
+                <SettingRow label="Analysis completions" description="Get notified when AI interpretations are ready." defaultChecked />
+                <SettingRow label="Consultation nudges" description="Appointment confirmation and follow-up prompts." defaultChecked />
+              </div>
+            </article>
+
+            {/* Security and controls */}
+            <article className="app-card p-6 md:p-8 shadow-sm space-y-4">
+              <div className="flex items-center gap-2 pb-2 border-b border-[var(--portal-border)]">
+                <ShieldCheck className="h-4 w-4 text-[#0ea5e9]" />
+                <h3 className="font-display text-sm font-bold tracking-tight text-[var(--portal-text)]">Security & Theme</h3>
+              </div>
+              <div className="divide-y divide-[var(--portal-border)]">
+                <SecurityRowItem
+                  icon={UserCircle2}
+                  title="Two-factor authentication"
+                  body="Secure account entry using verification codes."
+                />
+                <SecurityRowItem
+                  icon={MoonStar}
+                  title="Dark theme preference"
+                  body={`Display mode: ${theme}`}
+                  action={
+                    <Button 
+                      size="sm"
+                      variant="outline"
+                      className="h-8 rounded-lg border border-[var(--portal-border)] bg-[var(--portal-surface)] text-[9px] font-bold tracking-wide uppercase text-[var(--portal-muted)] hover:bg-[var(--portal-elevated)] transition-all" 
+                      onClick={toggleTheme}
+                    >
+                      Toggle
+                    </Button>
+                  }
+                />
+              </div>
+            </article>
+
+          </section>
+
+          <section className="grid gap-6 md:grid-cols-2">
+            
+            {/* AI Personalization */}
+            <article className="app-card p-6 md:p-8 shadow-sm space-y-4">
+              <div className="flex items-center gap-2 pb-2 border-b border-[var(--portal-border)]">
+                <Sparkles className="h-4 w-4 text-[#0ea5e9]" />
+                <h3 className="font-display text-sm font-bold tracking-tight text-[var(--portal-text)]">AI Personalization</h3>
+              </div>
+              <div className="divide-y divide-[var(--portal-border)]">
+                <SettingRow label="Detailed medical contexts" description="Include clinical insights in AI explanations." defaultChecked />
+                <SettingRow label="Lifestyle-first recommendations" description="Prioritize nutrition guidance over clinical targets." defaultChecked />
+                <SettingRow label="Timing smart nudges" description="Smart reminders synchronized with biological clock." />
+              </div>
+            </article>
+
+            {/* Subscription Card */}
+            <article className="app-card p-6 md:p-8 shadow-sm flex flex-col justify-between relative overflow-hidden">
+              <div className="absolute right-0 top-0 -mr-16 -mt-16 h-36 w-36 rounded-full bg-gradient-to-br from-[#0ea5e9]/5 to-transparent blur-2xl pointer-events-none" />
+              
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 pb-2 border-b border-[var(--portal-border)]">
+                  <CreditCard className="h-4 w-4 text-[#0ea5e9]" />
+                  <h3 className="font-display text-sm font-bold tracking-tight text-[var(--portal-text)]">Billing & Plan</h3>
+                </div>
+
+                <div className="rounded-xl border border-[var(--portal-border)] bg-[var(--portal-elevated)]/50 p-4 flex justify-between items-center">
+                  <div>
+                    <h4 className="font-display text-sm font-bold text-[var(--portal-text)]">MediScan Pro</h4>
+                    <p className="mt-1 text-[10px] text-[var(--portal-muted)]">₹299/mo • Renews May 20, 2026</p>
+                  </div>
+                  <Badge className="border border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[9px] font-bold tracking-wide uppercase px-2.5 py-0.5 rounded-full">Active</Badge>
+                </div>
+              </div>
+
+              <div className="mt-6 flex gap-2">
+                <Button variant="outline" className="h-9 w-full rounded-lg border border-[var(--portal-border)] bg-[var(--portal-surface)] text-[10px] font-semibold uppercase tracking-wide text-[var(--portal-text)] hover:bg-[var(--portal-elevated)] transition-all">
+                  Change Plan
+                </Button>
+                <Button variant="outline" className="h-9 w-full rounded-lg border border-[var(--portal-border)] bg-[var(--portal-surface)] text-[10px] font-semibold uppercase tracking-wide text-[var(--portal-text)] hover:bg-[var(--portal-elevated)] transition-all">
+                  Manage Billing
+                </Button>
+              </div>
+            </article>
+
+          </section>
+
         </div>
       </PageTransition>
     </DashboardLayout>
   );
 };
 
-const SettingRow = ({ label, defaultChecked = false }: { label: string; defaultChecked?: boolean }) => (
-  <div className="flex items-center justify-between rounded-md border border-[#dbe8f4] p-3">
-    <span className="text-sm text-[#415e76]">{label}</span>
-    <Switch defaultChecked={defaultChecked} />
+const CompletionRing = ({ progress }: { progress: number }) => (
+  <div
+    className="relative flex h-24 w-24 items-center justify-center rounded-full shadow-[0_8px_20px_-8px_rgba(14,165,233,0.1)]"
+    style={{
+      background: `conic-gradient(#0ea5e9 ${progress * 3.6}deg, color-mix(in_srgb,var(--portal-border)_24%,transparent) 0deg)`,
+    }}
+  >
+    <div className="absolute inset-[8px] rounded-full bg-[var(--portal-surface)]" />
+    <p className="relative font-display text-xl font-bold text-[var(--portal-text)]">{progress}%</p>
   </div>
 );
 
+const SettingRow = ({ label, description, defaultChecked = false }: { label: string; description: string; defaultChecked?: boolean }) => (
+  <div className="flex items-center justify-between gap-3 py-3.5 first:pt-1 last:pb-1">
+    <div className="space-y-0.5">
+      <p className="text-xs font-bold text-[var(--portal-text)] tracking-tight">{label}</p>
+      <p className="text-[10px] text-[var(--portal-muted)] leading-relaxed font-medium">{description}</p>
+    </div>
+    <Switch defaultChecked={defaultChecked} className="data-[state=checked]:bg-[#0ea5e9]" />
+  </div>
+);
+
+const SecurityRowItem = ({
+  icon: Icon,
+  title,
+  body,
+  action,
+}: {
+  icon: typeof ShieldCheck;
+  title: string;
+  body: string;
+  action?: ReactNode;
+}) => (
+  <div className="flex items-center justify-between gap-3 py-3.5 first:pt-1 last:pb-1">
+    <div className="flex items-start gap-2.5">
+      <Icon className="h-4.5 w-4.5 mt-0.5 text-[#0ea5e9]" />
+      <div className="space-y-0.5">
+        <p className="text-xs font-bold text-[var(--portal-text)] tracking-tight">{title}</p>
+        <p className="text-[10px] text-[var(--portal-muted)] leading-relaxed font-medium">{body}</p>
+      </div>
+    </div>
+    {action ?? <Switch className="data-[state=checked]:bg-[#0ea5e9]" />}
+  </div>
+);
