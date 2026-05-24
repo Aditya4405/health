@@ -92,19 +92,24 @@ export const DashboardLayout = ({ title, rightPanel, children }: DashboardLayout
             {/* Bottom Profile & Logout */}
             <div className="flex flex-col gap-4 w-full px-1">
               {/* Profile Card Container */}
-              <div className="profile-card-premium flex items-center justify-between gap-3">
+              <div className="profile-card-premium flex items-center justify-between gap-3 hover:scale-[1.01] transition-transform duration-200">
                 <div className="flex items-center gap-2.5 min-w-0">
                   <div className="relative">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-white bg-gradient-to-br from-[#3b82f6] to-[#0ea5e9] shadow-sm">
-                      {user.avatarInitials}
-                    </div>
+                    {user.avatarUrl ? (
+                      <img src={user.avatarUrl} alt="Avatar" className="h-10 w-10 shrink-0 rounded-full object-cover border border-[var(--portal-border)]" />
+                    ) : (
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-white bg-gradient-to-br from-[#3b82f6] to-[#0ea5e9] shadow-sm relative overflow-hidden">
+                        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:6px_6px]" />
+                        {user.avatarInitials}
+                      </div>
+                    )}
                     {/* Glowing online indicator */}
                     <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-emerald-500 border-2 border-[var(--portal-surface)]" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-xs font-semibold text-[var(--portal-text)] leading-tight">{user.name}</p>
                     <p className="text-[10px] text-[var(--portal-muted)] mt-0.5 leading-none font-medium">
-                      {roleDisplayLabel[user.role]}
+                      {roleDisplayLabel[user.role]} • <span className="text-emerald-500 font-semibold">Health synced</span>
                     </p>
                   </div>
                 </div>
