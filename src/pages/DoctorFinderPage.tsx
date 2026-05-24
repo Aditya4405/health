@@ -1,18 +1,24 @@
 import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, Search, Star, CalendarClock, Languages, BriefcaseMedical, X } from 'lucide-react';
+import { CalendarClock, CheckCircle2, Languages, MapPin, Search, Star, Stethoscope, X, ShieldCheck } from 'lucide-react';
 import { DashboardLayout } from '@/layouts/DashboardLayout';
 import { PageTransition } from '@/components/common/PageTransition';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Switch } from '@/components/ui/switch';
 import { doctorService, type Doctor } from '@/services/doctorService';
 import { useDebounce } from '@/hooks/useDebounce';
 import { usePageTitle } from '@/hooks/usePageTitle';
+import { cn } from '@/utils/cn';
 
 const specialties = ['All', 'Cardiologist', 'Hematologist', 'Endocrinologist', 'General Physician'];
+
+const avatarGradients = [
+  'from-[#38bdf8] to-[#4338ca]', // Cyan to Indigo
+  'from-[#ec4899] to-[#8b5cf6]', // Pink to Purple
+  'from-[#10b981] to-[#0369a1]', // Emerald to Blue
+  'from-[#f59e0b] to-[#be123c]', // Amber to Rose
+  'from-[#8b5cf6] to-[#d946ef]', // Violet to Fuchsia
+];
 
 export const DoctorFinderPage = () => {
   usePageTitle('Doctor Finder');
@@ -39,7 +45,6 @@ export const DoctorFinderPage = () => {
       });
       setDoctors(results);
     };
-
     void fetchDoctors();
   }, [availableToday, debouncedQuery, location, rating, specialty]);
 
@@ -53,122 +58,201 @@ export const DoctorFinderPage = () => {
   }, [availableToday, doctors, location, rating, specialty]);
 
   return (
-    <DashboardLayout title="Doctor Finder">
+    <DashboardLayout title="Doctors">
       <PageTransition>
-        <div className="space-y-5">
-          <Card>
-            <CardContent className="space-y-4 p-5">
+        <div className="mx-auto max-w-6xl space-y-6 px-4 py-6">
+          
+          {/* Header */}
+          <div className="pb-4 border-b border-[var(--portal-border)]">
+            <h2 className="font-display text-lg font-bold tracking-tight text-[var(--portal-text)]">Consult Specialists</h2>
+            <p className="text-[10px] text-[var(--portal-muted)] font-medium">Schedule telehealth bookings synced with your clinical timeline profile</p>
+          </div>
+
+          {/* Search, Filter Tools */}
+          <section className="grid gap-6 xl:grid-cols-[1fr_260px]">
+            <article className="app-card p-5 md:p-6 shadow-sm space-y-4">
               <div className="relative">
-                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6d8296]" />
+                <Search className="pointer-events-none absolute left-3.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[var(--portal-muted)]" />
                 <Input
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
-                  placeholder="Search by name, specialty, or condition..."
-                  className="pl-9"
+                  placeholder="Search specialist name, clinical specialty, or condition..."
+                  className="h-10 rounded-xl pl-9 bg-[var(--portal-surface)] border-[var(--portal-border)] text-xs text-[var(--portal-text)]"
                 />
               </div>
 
-              <div className="grid gap-3 md:grid-cols-5">
+              <div className="grid gap-3 grid-cols-2 md:grid-cols-4">
                 <select
-                  className="focus-ring h-11 rounded-sm border border-[#d7e4f0] bg-white px-3 text-sm"
+                  className="focus-ring h-9 rounded-xl border border-[var(--portal-border)] bg-[var(--portal-surface)] px-3 text-xs text-[var(--portal-text)]"
                   value={specialty}
                   onChange={(event) => setSpecialty(event.target.value)}
                 >
                   {specialties.map((item) => (
-                    <option key={item}>{item}</option>
+                    <option key={item} className="bg-[var(--portal-surface)] text-[var(--portal-text)]">{item}</option>
                   ))}
                 </select>
-                <Input value={location} onChange={(event) => setLocation(event.target.value)} placeholder="Location" />
+
+                <Input 
+                  value={location} 
+                  onChange={(event) => setLocation(event.target.value)} 
+                  placeholder="Location" 
+                  className="h-9 rounded-xl bg-[var(--portal-surface)] border-[var(--portal-border)] text-xs text-[var(--portal-text)] px-3" 
+                />
+
                 <select
-                  className="focus-ring h-11 rounded-sm border border-[#d7e4f0] bg-white px-3 text-sm"
+                  className="focus-ring h-9 rounded-xl border border-[var(--portal-border)] bg-[var(--portal-surface)] px-3 text-xs text-[var(--portal-text)]"
                   value={rating}
                   onChange={(event) => setRating(event.target.value)}
                 >
-                  <option>4.0+</option>
-                  <option>4.5+</option>
+                  <option className="bg-[var(--portal-surface)] text-[var(--portal-text)]">4.0+ Star Rating</option>
+                  <option className="bg-[var(--portal-surface)] text-[var(--portal-text)]">4.5+ Star Rating</option>
                 </select>
-                <label className="flex h-11 items-center justify-between rounded-sm border border-[#d7e4f0] bg-white px-3 text-sm text-[#4d6780]">
-                  Available Today
-                  <Switch checked={availableToday} onCheckedChange={setAvailableToday} />
-                </label>
-                <Button>Apply Filters</Button>
-              </div>
-            </CardContent>
-          </Card>
 
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <p className="text-sm text-[#4d6980]">Showing {filteredDoctors.length} doctors in {location}</p>
-            <div className="inline-flex items-center gap-2 text-sm">
-              <span className="text-[#60758a]">Sort:</span>
+                <button
+                  type="button"
+                  onClick={() => setAvailableToday(prev => !prev)}
+                  className={cn(
+                    "flex h-9 items-center justify-between rounded-xl border px-3.5 text-xs transition-all duration-200",
+                    availableToday
+                      ? "bg-[#0ea5e9]/10 border-[#0ea5e9]/30 text-[#0ea5e9]"
+                      : "bg-[var(--portal-surface)] border-[var(--portal-border)] text-[var(--portal-muted)] hover:bg-[var(--portal-elevated)]"
+                  )}
+                >
+                  Available Today
+                  <span className={cn("h-1.5 w-1.5 rounded-full ml-2", availableToday ? "bg-[#0ea5e9]" : "bg-gray-400")} />
+                </button>
+              </div>
+            </article>
+
+            {/* Map Anchored Indicator */}
+            <article className="app-card p-5 shadow-sm relative overflow-hidden flex flex-col justify-between">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(14,165,233,0.04),transparent_45%),radial-gradient(circle_at_72%_58%,rgba(14,165,233,0.02),transparent_42%)] pointer-events-none" />
+              <p className="text-[9px] font-semibold uppercase tracking-wider text-[var(--portal-muted)]">Location Nodes</p>
+              
+              <div className="relative mt-2.5 h-[80px] overflow-hidden rounded-xl border border-[var(--portal-border)] bg-[var(--portal-elevated)]">
+                <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(var(--portal-border) 1px, transparent 0)', backgroundSize: '10px 10px' }} />
+                {['left-[28%] top-[38%]', 'left-[58%] top-[25%]', 'left-[44%] top-[60%]'].map((pin, i) => (
+                  <span key={pin} className={`absolute ${pin} inline-flex h-3 w-3 rounded-full border border-white bg-gradient-to-tr from-[#0ea5e9] to-[#0284c7] shadow-md animate-bounce`} style={{ animationDelay: `${i * 0.15}s` }} />
+                ))}
+              </div>
+            </article>
+          </section>
+
+          {/* Sorter */}
+          <section className="flex flex-wrap items-center justify-between gap-3 pt-2">
+            <p className="text-xs text-[var(--portal-muted)] font-medium">Found {filteredDoctors.length} doctors near your coordinates</p>
+            <div className="inline-flex rounded-xl border border-[var(--portal-border)] bg-[var(--portal-surface)] p-1">
               {(['Relevance', 'Rating', 'Distance', 'Availability'] as const).map((mode) => (
                 <button
                   key={mode}
                   type="button"
                   onClick={() => setSortBy(mode)}
-                  className={`rounded-full px-3 py-1 ${sortBy === mode ? 'bg-[#dbeafb] text-primary' : 'bg-white text-[#60758a]'}`}
+                  className={cn(
+                    "rounded-lg px-3 py-1 text-[10px] font-semibold uppercase tracking-wide transition-all border border-transparent",
+                    sortBy === mode 
+                      ? 'bg-[var(--portal-elevated)] text-[#0ea5e9] border-[var(--portal-border)]' 
+                      : 'text-[var(--portal-muted)] hover:text-[var(--portal-text)]'
+                  )}
                 >
                   {mode}
                 </button>
               ))}
             </div>
-          </div>
+          </section>
 
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {filteredDoctors.map((doctor) => (
-              <Card key={doctor.id} className="card-hover">
-                <CardContent className="p-5">
-                  <div className="flex items-start gap-3">
-                    <span className="flex h-14 w-14 items-center justify-center rounded-full bg-[#dceafb] text-lg font-semibold text-primary">
-                      {doctor.name
-                        .split(' ')
-                        .filter((_, index) => index !== 0)
-                        .map((token) => token[0])
-                        .join('')
-                        .slice(0, 2)}
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <h3 className="truncate font-display text-lg font-semibold">{doctor.name}</h3>
-                      <Badge variant="teal" className="mt-1">
+          {/* Telehealth grid */}
+          <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {filteredDoctors.map((doctor, index) => {
+              const gradientClass = avatarGradients[index % avatarGradients.length];
+              return (
+                <article 
+                  key={doctor.id} 
+                  className="app-card app-card-hover p-6 flex flex-col justify-between relative overflow-hidden transition-all duration-300"
+                >
+                  <div className="absolute right-0 top-0 -mr-16 -mt-16 h-36 w-36 rounded-full bg-gradient-to-br from-[#0ea5e9]/5 to-transparent blur-2xl pointer-events-none" />
+                  
+                  <div>
+                    {/* Header profile block */}
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-center gap-3.5">
+                        <div className={cn("flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-tr text-white text-xs font-bold shadow-md", gradientClass)}>
+                          {doctor.name
+                            .split(' ')
+                            .filter((_, idx) => idx !== 0)
+                            .map((token) => token[0])
+                            .join('')
+                            .slice(0, 2)}
+                        </div>
+                        <div>
+                          <h3 className="font-display text-sm font-bold tracking-tight text-[var(--portal-text)] leading-tight">{doctor.name}</h3>
+                          <p className="mt-1 text-[10px] text-[var(--portal-muted)] font-medium leading-none">{doctor.hospital}</p>
+                        </div>
+                      </div>
+
+                      {/* AI Match badge */}
+                      <span className="inline-flex rounded-full bg-[#0ea5e9]/10 border border-[#0ea5e9]/20 px-2.5 py-0.5 text-[9px] font-semibold text-[#0ea5e9] shadow-sm">
+                        {Math.round(Math.min(99, doctor.rating * 20 + 8))}% Match
+                      </span>
+                    </div>
+
+                    {/* Tags */}
+                    <div className="mt-4 flex flex-wrap gap-1.5">
+                      <span className="inline-flex rounded-full border border-[var(--portal-border)] bg-[var(--portal-elevated)] px-2.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-[var(--portal-text)]">
                         {doctor.specialty}
-                      </Badge>
-                      <p className="mt-2 text-sm text-[#657c91]">{doctor.hospital}</p>
+                      </span>
+                      <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                        <CheckCircle2 className="h-3 w-3" />
+                        Verified
+                      </span>
+                    </div>
+
+                    {/* Metadata details */}
+                    <div className="mt-5 space-y-2 text-xs text-[var(--portal-muted)] font-medium">
+                      <div className="flex items-center gap-2">
+                        <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-500" />
+                        <span className="text-[var(--portal-text)] font-bold">{doctor.rating}</span>
+                        <span>({doctor.reviews} reviews)</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <CalendarClock className="h-3.5 w-3.5 text-[#0ea5e9]" />
+                        <span>Available: <span className="text-[#0ea5e9] font-bold">{doctor.nextAvailable}</span></span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <MapPin className="h-3.5 w-3.5 text-[var(--portal-muted)]" />
+                        <span>{doctor.location}</span>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="mt-4 space-y-2 text-sm text-[#4e6880]">
-                    <p className="inline-flex items-center gap-1">
-                      <Star className="h-4 w-4 text-amber" /> {doctor.rating} ({doctor.reviews} reviews)
-                    </p>
-                    <p className="inline-flex items-center gap-1">
-                      <BriefcaseMedical className="h-4 w-4 text-teal" /> {doctor.experience} years experience
-                    </p>
-                    <p className="inline-flex items-center gap-1">
-                      <CalendarClock className="h-4 w-4 text-[#639922]" /> {doctor.nextAvailable}
-                    </p>
-                    <p className="inline-flex items-center gap-1">
-                      <MapPin className="h-4 w-4 text-primary" /> {doctor.location}
-                    </p>
-                    <p className="inline-flex items-center gap-1">
-                      <Languages className="h-4 w-4 text-purple" /> {doctor.languages.join(', ')}
-                    </p>
-                  </div>
+                  {/* Pricing and booking */}
+                  <div className="mt-6 pt-4 border-t border-[var(--portal-border)] space-y-4">
+                    <div className="flex items-center justify-between">
+                      <p className="text-[10px] uppercase font-bold tracking-wider text-[var(--portal-muted)]">Consultation Fee</p>
+                      <p className="font-display text-base font-bold text-[var(--portal-text)]">₹{doctor.fee}</p>
+                    </div>
 
-                  <p className="mt-4 font-display text-xl font-semibold">?{doctor.fee}</p>
-
-                  <div className="mt-4 grid grid-cols-2 gap-2">
-                    <Button variant="outline" onClick={() => setSelectedDoctor(doctor)}>
-                      View Profile
-                    </Button>
-                    <Button variant="success" className="hover:bg-primary">
-                      Book Now
-                    </Button>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Button 
+                        variant="outline"
+                        className="h-9 rounded-xl border-[var(--portal-border)] bg-[var(--portal-surface)] text-xs font-semibold text-[var(--portal-text)] hover:bg-[var(--portal-elevated)] transition-all duration-200" 
+                        onClick={() => setSelectedDoctor(doctor)}
+                      >
+                        Profile
+                      </Button>
+                      <Button
+                        className="btn-premium-primary h-9 rounded-xl text-xs font-semibold"
+                      >
+                        Book Slot
+                      </Button>
+                    </div>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                </article>
+              );
+            })}
+          </section>
         </div>
 
+        {/* Doctor profile slide-in details drawer */}
         <AnimatePresence>
           {selectedDoctor && (
             <>
@@ -176,44 +260,59 @@ export const DoctorFinderPage = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-40 bg-[#031f3d]/45"
+                className="fixed inset-0 z-40 bg-[var(--portal-bg)]/60 backdrop-blur-sm"
                 onClick={() => setSelectedDoctor(null)}
               />
               <motion.aside
-                initial={{ x: 420 }}
+                initial={{ x: 440 }}
                 animate={{ x: 0 }}
-                exit={{ x: 420 }}
-                className="fixed right-0 top-0 z-50 h-full w-full max-w-[420px] overflow-y-auto border-l border-[#cfdeec] bg-white p-5 shadow-2xl"
+                exit={{ x: 440 }}
+                transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                className="fixed right-0 top-0 z-50 h-full w-full max-w-[420px] overflow-y-auto border-l border-[var(--portal-border)] bg-[var(--portal-surface)] p-6 shadow-2xl space-y-6 text-[var(--portal-text)]"
               >
-                <div className="mb-4 flex items-center justify-between">
-                  <h3 className="font-display text-xl font-semibold">Doctor Profile</h3>
-                  <Button variant="ghost" size="icon" onClick={() => setSelectedDoctor(null)}>
-                    <X className="h-4 w-4" />
+                <div className="flex items-center justify-between border-b border-[var(--portal-border)] pb-4">
+                  <h3 className="font-display text-lg font-bold tracking-tight">{selectedDoctor.name}</h3>
+                  <Button variant="ghost" size="icon" onClick={() => setSelectedDoctor(null)} className="rounded-full text-[var(--portal-muted)] hover:text-[var(--portal-text)] hover:bg-[var(--portal-elevated)]">
+                    <X className="h-5 w-5" />
                   </Button>
                 </div>
-                <div className="space-y-4">
-                  <div className="rounded-md bg-[#f4f8fc] p-4">
-                    <p className="font-display text-lg font-semibold">{selectedDoctor.name}</p>
-                    <p className="text-sm text-[#60758a]">{selectedDoctor.specialty}</p>
-                    <p className="mt-2 text-sm text-[#4f6982]">{selectedDoctor.about}</p>
+
+                <div className="space-y-5">
+                  <div className="rounded-2xl border border-[var(--portal-border)] bg-[var(--portal-elevated)]/50 p-5 space-y-3">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-[#0ea5e9]">{selectedDoctor.specialty}</p>
+                    <p className="text-xs leading-relaxed text-[var(--portal-muted)] font-medium">{selectedDoctor.about}</p>
+                    <div className="mt-3 flex flex-wrap gap-2 pt-2">
+                      <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-0.5 text-[9px] font-semibold uppercase text-emerald-600 dark:text-emerald-400">
+                        <ShieldCheck className="h-3.5 w-3.5" />
+                        Credentials Verified
+                      </span>
+                      <span className="inline-flex rounded-full border border-[var(--portal-border)] bg-[var(--portal-elevated)] px-2.5 py-0.5 text-[9px] font-semibold uppercase text-[var(--portal-muted)]">
+                        {selectedDoctor.experience} Yrs Experience
+                      </span>
+                    </div>
                   </div>
+
                   <div>
-                    <p className="mb-2 text-sm font-semibold text-[#4d6980]">Availability</p>
+                    <p className="mb-2.5 text-[9px] font-semibold uppercase tracking-[0.12em] text-[var(--portal-muted)]">Select Appointment Slot</p>
                     <div className="grid grid-cols-3 gap-2">
-                      {['10:00 AM', '11:30 AM', '2:00 PM', '4:30 PM', '6:00 PM'].map((slot) => (
-                        <button key={slot} type="button" className="focus-ring rounded-md border border-[#d4e2ef] px-2 py-2 text-xs hover:bg-[#edf4fb]">
+                      {['10:00 AM', '11:30 AM', '2:00 PM', '4:30 PM', '6:00 PM', '7:30 PM'].map((slot) => (
+                        <button key={slot} type="button" className="focus-ring rounded-xl border border-[var(--portal-border)] bg-[var(--portal-surface)] hover:bg-[var(--portal-elevated)] px-2 py-2.5 text-xs font-semibold text-[var(--portal-text)] transition-all">
                           {slot}
                         </button>
                       ))}
                     </div>
                   </div>
-                  <div className="rounded-md border border-[#dbe8f4] p-4">
-                    <p className="text-sm font-semibold text-[#4f6882]">Reviews</p>
-                    <p className="mt-2 text-sm text-[#60758a]">“Excellent clarity and compassionate consultation.”</p>
-                    <p className="mt-2 text-sm text-[#60758a]">“Helped me understand lipid trends better.”</p>
+
+                  <div className="rounded-2xl border border-[var(--portal-border)] bg-[var(--portal-elevated)]/30 p-5 text-xs text-[var(--portal-muted)] space-y-3">
+                    <p className="font-semibold text-[var(--portal-text)]">Patient feedback highlights</p>
+                    <p className="italic">"Compassionate doctor who explains biological indicators in detail."</p>
+                    <p className="italic">"Helped customize my lifestyle nutrition targets based on lab markers."</p>
                   </div>
-                  <Button className="w-full" variant="success">
-                    Book Consultation
+
+                  <Button
+                    className="btn-premium-primary h-11 w-full rounded-xl text-xs font-semibold"
+                  >
+                    Confirm Appointment Bookings
                   </Button>
                 </div>
               </motion.aside>
@@ -224,4 +323,3 @@ export const DoctorFinderPage = () => {
     </DashboardLayout>
   );
 };
-
