@@ -6,6 +6,7 @@ export interface User {
   email: string;
   role: Role;
   avatarInitials: string;
+  avatarUrl?: string;
   specialty?: string;
   plan?: 'FREE' | 'PRO' | 'TEAM';
 }
