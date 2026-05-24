@@ -26,8 +26,28 @@ export interface LoginPayload {
   role: Role;
 }
 
+export interface PatientSignupProfile {
+  age: number;
+  gender: 'MALE' | 'FEMALE' | 'OTHER';
+  bloodGroup: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
+  emergencyContact: string;
+}
+
+export interface DoctorSignupProfile {
+  licenseNumber: string;
+  specialization: string;
+  hospitalName: string;
+  yearsOfExperience: number;
+  consultationMode: 'IN_PERSON' | 'VIRTUAL' | 'HYBRID';
+  verificationUploadName: string;
+  linkedinProfile?: string;
+  availableTimings?: string;
+}
+
 export interface SignupPayload extends LoginPayload {
   name: string;
+  patientProfile?: PatientSignupProfile;
+  doctorProfile?: DoctorSignupProfile;
 }
 
 export interface ReportMetric {
