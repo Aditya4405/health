@@ -1,72 +1,279 @@
-import { Clock3, Download, FileText, Search } from 'lucide-react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronDown, ChevronUp, Download, FileText, Search, Stethoscope, UploadCloud, TrendingUp, TrendingDown } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { DashboardLayout } from '@/layouts/DashboardLayout';
 import { PageTransition } from '@/components/common/PageTransition';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { usePageTitle } from '@/hooks/usePageTitle';
+import { cn } from '@/utils/cn';
 
 const files = [
-  { id: 'f1', name: 'CBC-Jan-2025.pdf', uploaded: '2 days ago', type: 'Blood Test', size: '1.4MB', status: 'Analyzed' },
-  { id: 'f2', name: 'Lipid-Dec-2024.pdf', uploaded: '3 weeks ago', type: 'Cholesterol', size: '2.1MB', status: 'Analyzed' },
-  { id: 'f3', name: 'Thyroid-Nov-2024.png', uploaded: '6 weeks ago', type: 'Hormones', size: '700KB', status: 'Analyzed' },
-  { id: 'f4', name: 'Metabolic-Oct-2024.pdf', uploaded: '2 months ago', type: 'Metabolic', size: '1.8MB', status: 'Archived' },
+  {
+    id: 'f1',
+    name: 'Complete Blood Count (CBC)',
+    uploaded: '2 days ago',
+    type: 'Blood Test',
+    status: 'Needs Review',
+    statusTone: 'warning',
+    trend: 'stable',
+    summary: 'Your hemoglobin and white blood cell levels are looking stable, but iron stores (ferritin) are on the lower side. We recommend checking back in a few weeks.',
+    biomarkers: [
+      { name: 'Hemoglobin', value: '13.2 g/dL', status: 'Normal', trend: 'stable' },
+      { name: 'Ferritin', value: '18 ng/mL', status: 'Low', trend: 'down' },
+    ],
+    doctorNote: 'Let\'s repeat this CBC test in 2 weeks for trend confirmation.',
+  },
+  {
+    id: 'f2',
+    name: 'Lipid Panel',
+    uploaded: '3 weeks ago',
+    type: 'Cholesterol Test',
+    status: 'Needs Review',
+    statusTone: 'warning',
+    trend: 'up',
+    summary: 'Your LDL (sometimes called bad cholesterol) is slightly elevated at 180 mg/dL. Increasing daily fiber and regular movement can help support heart health.',
+    biomarkers: [
+      { name: 'LDL Cholesterol', value: '180 mg/dL', status: 'High', trend: 'up' },
+      { name: 'HDL Cholesterol', value: '45 mg/dL', status: 'Optimal', trend: 'stable' },
+    ],
+    doctorNote: 'Cardiology consult advised if unchanged in your next checkup.',
+  },
+  {
+    id: 'f3',
+    name: 'Thyroid Panel',
+    uploaded: '6 weeks ago',
+    type: 'Hormonal Test',
+    status: 'All Clear',
+    statusTone: 'success',
+    trend: 'stable',
+    summary: 'Your thyroid stimulating hormone (TSH) and thyroxine (T4) levels are perfectly balanced and within normal ranges. No actions needed.',
+    biomarkers: [
+      { name: 'TSH', value: '2.1 uIU/mL', status: 'Normal', trend: 'stable' },
+      { name: 'Free T4', value: '1.2 ng/dL', status: 'Normal', trend: 'stable' },
+    ],
+    doctorNote: 'Continue your routine wellness schedule.',
+  },
+  {
+    id: 'f4',
+    name: 'Comprehensive Metabolic Panel',
+    uploaded: '2 months ago',
+    type: 'Metabolic Health',
+    status: 'All Clear',
+    statusTone: 'success',
+    trend: 'stable',
+    summary: 'Your kidney function, liver enzymes, and blood glucose are all stable and healthy. Remember to drink plenty of water throughout the day.',
+    biomarkers: [
+      { name: 'Fasting Glucose', value: '92 mg/dL', status: 'Normal', trend: 'stable' },
+      { name: 'Kidney Function (eGFR)', value: '98 mL/min', status: 'Normal', trend: 'stable' },
+    ],
+    doctorNote: 'Maintain your active wellness baseline.',
+  },
 ];
 
 export const FileHistoryPage = () => {
-  usePageTitle('My Reports');
+  usePageTitle('Reports');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  const filteredFiles = files.filter(file => 
+    file.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    file.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    file.summary.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const toggleExpand = (id: string) => {
+    setExpandedId(prev => prev === id ? null : id);
+  };
 
   return (
-    <DashboardLayout title="My Reports">
+    <DashboardLayout title="Reports">
       <PageTransition>
-        <div className="space-y-5">
-          <Card>
-            <CardContent className="flex flex-col gap-3 p-5 md:flex-row md:items-center">
-              <div className="relative flex-1">
-                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6d8296]" />
-                <Input placeholder="Search report files..." className="pl-9" />
+        <div className="mx-auto max-w-4xl space-y-6 px-4 py-6">
+          
+          {/* Timeline Header Area */}
+          <section className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-between pb-4 border-b border-[var(--portal-border)]">
+            <div>
+              <h2 className="font-display text-lg font-bold tracking-tight text-[var(--portal-text)]">Health Records</h2>
+              <p className="text-[10px] text-[var(--portal-muted)]">Complete clinical timeline logs and biomarker reports</p>
+            </div>
+            <div className="flex flex-wrap sm:flex-nowrap gap-3 items-center">
+              <div className="relative flex-1 sm:w-64">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[var(--portal-muted)]" />
+                <Input 
+                  placeholder="Search health records..." 
+                  className="h-10 rounded-xl pl-9 pr-4 bg-[var(--portal-surface)] border-[var(--portal-border)] text-xs text-[var(--portal-text)]"
+                  value={searchTerm}
+                  onChange={e => setSearchTerm(e.target.value)}
+                />
               </div>
-              <Button>Upload New Report</Button>
-            </CardContent>
-          </Card>
+              <Link to="/app/patient/upload" className="w-full sm:w-auto">
+                <Button
+                  className="btn-premium-primary h-10 w-full sm:w-auto rounded-xl px-5 text-xs font-semibold tracking-wide"
+                >
+                  <UploadCloud className="mr-1.5 h-4 w-4" />
+                  Upload Lab Results
+                </Button>
+              </Link>
+            </div>
+          </section>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>File History</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {files.map((file) => (
-                <div key={file.id} className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-[#d9e7f3] p-4">
-                  <div className="flex items-start gap-3">
-                    <span className="mt-1 inline-flex h-10 w-10 items-center justify-center rounded-md bg-[#e6f1fb] text-primary">
-                      <FileText className="h-5 w-5" />
-                    </span>
-                    <div>
-                      <p className="font-medium text-[#2d4f68]">{file.name}</p>
-                      <p className="mt-1 inline-flex items-center gap-3 text-sm text-[#60758a]">
-                        <span className="inline-flex items-center gap-1">
-                          <Clock3 className="h-4 w-4" /> {file.uploaded}
-                        </span>
-                        <span>{file.type}</span>
-                        <span>{file.size}</span>
-                      </p>
+          {/* Dotted clinical timeline */}
+          <section className="relative pl-6 md:pl-8 space-y-6">
+            {/* Dotted Axis */}
+            <div className="absolute left-[11px] md:left-[15px] top-4 bottom-4 w-[2px] bg-gradient-to-b from-[#0ea5e9]/40 via-[var(--portal-border)] to-[var(--portal-border)] border-dashed border-l border-[var(--portal-border)]" />
+
+            {filteredFiles.length === 0 ? (
+              <div className="text-center py-16 text-[var(--portal-muted)]">
+                No matching reports located in your profile logs.
+              </div>
+            ) : (
+              filteredFiles.map((file) => {
+                const isExpanded = expandedId === file.id;
+                return (
+                  <article key={file.id} className="relative group transition-all duration-300">
+                    
+                    {/* Glowing timeline node */}
+                    <div className={cn(
+                      "absolute -left-[29px] md:-left-[37px] top-[18px] z-10 flex h-6 w-6 md:h-8 md:w-8 items-center justify-center rounded-full border shadow-sm transition-all duration-300",
+                      file.statusTone === 'warning'
+                        ? "bg-amber-500/10 border-amber-500/20 text-amber-500"
+                        : "bg-emerald-500/10 border-emerald-500/20 text-emerald-500"
+                    )}>
+                      <span className={cn(
+                        "h-2 w-2 rounded-full",
+                        file.statusTone === 'warning' ? "bg-amber-500" : "bg-emerald-500"
+                      )} />
                     </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Badge variant={file.status === 'Analyzed' ? 'success' : 'outline'}>{file.status}</Badge>
-                    <Button size="sm" variant="secondary">
-                      <Download className="mr-1 h-4 w-4" /> Download
-                    </Button>
-                    <Button size="sm">View Analysis</Button>
-                  </div>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
+
+                    {/* Timeline Card */}
+                    <div className="app-card app-card-hover overflow-hidden">
+                      {/* Accordion header */}
+                      <button
+                        type="button"
+                        onClick={() => toggleExpand(file.id)}
+                        className="flex w-full items-center justify-between p-5 text-left transition-colors hover:bg-[var(--portal-elevated)]/50"
+                      >
+                        <div className="flex items-center gap-3.5">
+                          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--portal-elevated)] border border-[var(--portal-border)] text-[#0ea5e9]">
+                            <FileText className="h-5 w-5" />
+                          </span>
+                          <div>
+                            <h4 className="font-display text-sm font-bold text-[var(--portal-text)] tracking-tight">{file.name}</h4>
+                            <p className="mt-0.5 text-[10px] text-[var(--portal-muted)]">
+                              {file.type} • {file.uploaded}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-4">
+                          {/* Mini Trend Arrow */}
+                          <span className={cn(
+                            "flex items-center gap-1 text-[9px] font-semibold px-2 py-0.5 rounded-full border uppercase tracking-wider",
+                            file.trend === 'up'
+                              ? "bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-400"
+                              : "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400"
+                          )}>
+                            {file.trend === 'up' ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+                            {file.trend === 'up' ? 'Watch' : 'Stable'}
+                          </span>
+
+                          <span className={cn(
+                            "rounded-full px-2.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider border",
+                            file.statusTone === 'warning'
+                              ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
+                              : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+                          )}>
+                            {file.status}
+                          </span>
+                          {isExpanded ? (
+                            <ChevronUp className="h-4 w-4 text-[var(--portal-muted)]" />
+                          ) : (
+                            <ChevronDown className="h-4 w-4 text-[var(--portal-muted)]" />
+                          )}
+                        </div>
+                      </button>
+
+                      {/* Expandable panel height animation */}
+                      <AnimatePresence initial={false}>
+                        {isExpanded && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                          >
+                            <div className="border-t border-[var(--portal-border)] bg-gradient-to-b from-[var(--portal-elevated)]/20 to-transparent p-5 space-y-5">
+                              
+                              {/* Summary */}
+                              <div className="space-y-1">
+                                <p className="text-[9px] font-semibold uppercase tracking-wider text-[var(--portal-muted)]">AI Companion Summary</p>
+                                <p className="text-xs leading-relaxed text-[var(--portal-text)] font-medium">{file.summary}</p>
+                              </div>
+
+                              {/* Biomarker details table */}
+                              <div className="space-y-2">
+                                <p className="text-[9px] font-semibold uppercase tracking-wider text-[var(--portal-muted)]">Analyzed Biomarkers</p>
+                                <div className="grid gap-2.5 sm:grid-cols-2">
+                                  {file.biomarkers.map((bio) => (
+                                    <div key={bio.name} className="flex items-center justify-between rounded-xl border border-[var(--portal-border)] bg-[var(--portal-surface)] px-4 py-3 text-xs">
+                                      <span className="font-semibold text-[var(--portal-text)]">{bio.name}</span>
+                                      <div className="flex items-center gap-2">
+                                        <span className="font-bold text-[var(--portal-text)]">{bio.value}</span>
+                                        <span className={cn(
+                                          "rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase border",
+                                          bio.status === 'Normal' || bio.status === 'Optimal'
+                                            ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+                                            : "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
+                                        )}>
+                                          {bio.status}
+                                        </span>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+
+                              {/* Companion note */}
+                              <div className="rounded-xl border border-[var(--portal-border)] bg-[var(--portal-elevated)]/50 p-4 text-xs text-[var(--portal-muted)] flex items-start gap-2.5">
+                                <Stethoscope className="mt-0.5 h-4 w-4 shrink-0 text-[#0ea5e9]" />
+                                <div>
+                                  <p className="font-semibold text-[var(--portal-text)] mb-0.5">Recommended Plan</p>
+                                  <p className="leading-relaxed font-medium">{file.doctorNote}</p>
+                                </div>
+                              </div>
+
+                              {/* Action controls */}
+                              <div className="flex flex-wrap gap-2.5 pt-1">
+                                <Link to={`/app/patient/analysis/${file.id}`}>
+                                  <Button className="btn-premium-primary h-9 rounded-xl px-5 text-xs font-semibold tracking-wide">
+                                    Companion Analysis
+                                  </Button>
+                                </Link>
+                                <Button 
+                                  variant="outline" 
+                                  className="h-9 rounded-xl px-4 text-xs font-semibold tracking-wide border border-[var(--portal-border)] bg-[var(--portal-surface)] text-[var(--portal-text)] hover:bg-[var(--portal-elevated)] transition-all duration-200"
+                                >
+                                  <Download className="mr-1.5 h-3.5 w-3.5" />
+                                  Download PDF
+                                </Button>
+                              </div>
+
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+
+                    </div>
+                  </article>
+                );
+              })
+            )}
+          </section>
+
         </div>
       </PageTransition>
     </DashboardLayout>
   );
 };
-
