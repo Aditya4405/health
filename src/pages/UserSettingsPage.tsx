@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react';
-import { Bell, CreditCard, MoonStar, ShieldCheck, UserCircle2, ArrowRight, Sparkles } from 'lucide-react';
+import { useState, type ReactNode } from 'react';
+import { Bell, CreditCard, MoonStar, ShieldCheck, UserCircle2, ArrowRight, Sparkles, Camera } from 'lucide-react';
 import { DashboardLayout } from '@/layouts/DashboardLayout';
 import { PageTransition } from '@/components/common/PageTransition';
 import { Input } from '@/components/ui/input';
@@ -7,12 +7,45 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { useTheme } from '@/context/ThemeContext';
+import { useAuth } from '@/context/AuthContext';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { cn } from '@/utils/cn';
 
 export const UserSettingsPage = () => {
   usePageTitle('Settings');
   const { theme, toggleTheme } = useTheme();
+  const { user, updateUser } = useAuth();
+  const [uploading, setUploading] = useState(false);
+
+  const processFile = (file: File) => {
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+      alert('Please upload a JPG, PNG, or WEBP image.');
+      return;
+    }
+
+    setUploading(true);
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result as string;
+      setTimeout(() => {
+        updateUser({ avatarUrl: result });
+        setUploading(false);
+      }, 800);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) processFile(file);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files?.[0];
+    if (file) processFile(file);
+  };
 
   return (
     <DashboardLayout title="Settings">
@@ -29,9 +62,61 @@ export const UserSettingsPage = () => {
           <section className="grid gap-6 md:grid-cols-[1fr_260px]">
             {/* Form */}
             <article className="app-card p-6 shadow-sm space-y-5">
-              <div>
-                <span className="text-[9px] font-semibold uppercase tracking-wider text-[var(--portal-muted)]">Account details</span>
-                <h3 className="font-display text-base font-bold tracking-tight text-[var(--portal-text)] mt-0.5">Personal Profile</h3>
+              {/* Account Identity Header with Upload Widget */}
+              <div className="flex flex-col sm:flex-row gap-5 items-start sm:items-center pb-5 border-b border-[var(--portal-border)]">
+                <div 
+                  className="relative group cursor-pointer"
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={handleDrop}
+                >
+                  <div className="h-24 w-24 rounded-full overflow-hidden relative shadow-md border-2 border-[#0ea5e9]/20 group-hover:border-[#0ea5e9]/60 transition-all duration-300">
+                    {user?.avatarUrl ? (
+                      <img src={user.avatarUrl} alt="Avatar" className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110" />
+                    ) : (
+                      <div className="h-full w-full bg-gradient-to-tr from-[#3b82f6] to-[#0ea5e9] flex items-center justify-center text-white text-2xl font-bold tracking-wider relative">
+                        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:8px_8px]" />
+                        {user?.avatarInitials ?? "AK"}
+                      </div>
+                    )}
+                    
+                    {/* Hover Change Photo state */}
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white text-[9px] font-semibold uppercase tracking-wide transition-opacity duration-200">
+                      <Camera className="h-4.5 w-4.5 mb-1" />
+                      <span>Change photo</span>
+                    </div>
+
+                    {/* Loader overlay */}
+                    {uploading && (
+                      <div className="absolute inset-0 bg-[var(--portal-surface)] flex items-center justify-center">
+                        <div className="h-5 w-5 rounded-full border-2 border-[#0ea5e9] border-t-transparent animate-spin" />
+                      </div>
+                    )}
+                  </div>
+                  
+                  <input
+                    type="file"
+                    accept="image/png, image/jpeg, image/webp"
+                    onChange={handlePhotoUpload}
+                    className="absolute inset-0 opacity-0 cursor-pointer"
+                    title="Upload profile photo"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h3 className="font-display text-base font-bold text-[var(--portal-text)]">{user?.name ?? 'Aarav Kapoor'}</h3>
+                    <Badge className="border border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[9px] font-bold tracking-wide uppercase px-2 py-0.5 rounded-full">
+                      Verified Profile
+                    </Badge>
+                  </div>
+                  <p className="text-[10px] text-[var(--portal-muted)] font-medium leading-none flex items-center gap-1.5 mt-0.5">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    Health synced • Companion Active
+                  </p>
+                  <p className="text-[9px] text-[var(--portal-muted)] leading-none pt-1">
+                    Last sync: Just now
+                  </p>
+                </div>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
@@ -155,7 +240,9 @@ export const UserSettingsPage = () => {
                     <h4 className="font-display text-sm font-bold text-[var(--portal-text)]">MediScan Pro</h4>
                     <p className="mt-1 text-[10px] text-[var(--portal-muted)]">₹299/mo • Renews May 20, 2026</p>
                   </div>
-                  <Badge className="border border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[9px] font-bold tracking-wide uppercase px-2.5 py-0.5 rounded-full">Active</Badge>
+                  <span className="bg-gradient-to-r from-[#0ea5e9] to-[#0284c7] text-white text-[9px] font-bold tracking-wider uppercase px-3 py-1 rounded-full shadow-[0_0_12px_rgba(14,165,233,0.25)] border border-[#0ea5e9]/20">
+                    Pro Active
+                  </span>
                 </div>
               </div>
 
