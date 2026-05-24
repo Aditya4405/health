@@ -12,6 +12,7 @@ interface AuthContextValue {
   signup: (payload: SignupPayload) => Promise<void>;
   logout: () => void;
   getDefaultRoute: (role?: Role | null) => string;
+  updateUser: (fields: Partial<User>) => void;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -69,6 +70,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem(STORAGE_KEYS.user);
   };
 
+  const updateUser = (fields: Partial<User>) => {
+    if (!user) return;
+    const updatedUser = { ...user, ...fields };
+    setUser(updatedUser);
+    localStorage.setItem(STORAGE_KEYS.user, JSON.stringify(updatedUser));
+  };
+
   const value = useMemo<AuthContextValue>(
     () => ({
       user,
@@ -79,6 +87,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       signup,
       logout,
       getDefaultRoute: (role) => (role ? roleRouteMap[role] : '/login'),
+      updateUser,
     }),
     [isLoading, token, user],
   );
