@@ -64,8 +64,8 @@ export const DoctorFinderPage = () => {
           
           {/* Header */}
           <div className="pb-4 border-b border-[var(--portal-border)]">
-            <h2 className="font-display text-lg font-bold tracking-tight text-[var(--portal-text)]">Consult Specialists</h2>
-            <p className="text-[10px] text-[var(--portal-muted)] font-medium">Schedule telehealth bookings synced with your clinical timeline profile</p>
+            <h2 className="text-section-title text-[var(--portal-text)]">Consult Specialists</h2>
+            <p className="text-[11px] text-[var(--portal-muted)] font-semibold uppercase tracking-wider mt-0.5">Schedule telehealth bookings synced with your clinical timeline profile</p>
           </div>
 
           {/* Search, Filter Tools */}
@@ -73,17 +73,17 @@ export const DoctorFinderPage = () => {
             <article className="app-card p-5 md:p-6 shadow-sm space-y-4">
               <div className="relative">
                 <Search className="pointer-events-none absolute left-3.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[var(--portal-muted)]" />
-                <Input
+                <input
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   placeholder="Search specialist name, clinical specialty, or condition..."
-                  className="h-10 rounded-xl pl-9 bg-[var(--portal-surface)] border-[var(--portal-border)] text-xs text-[var(--portal-text)]"
+                  className="input-premium w-full pl-9 text-xs h-10"
                 />
               </div>
 
               <div className="grid gap-3 grid-cols-2 md:grid-cols-4">
                 <select
-                  className="focus-ring h-9 rounded-xl border border-[var(--portal-border)] bg-[var(--portal-surface)] px-3 text-xs text-[var(--portal-text)]"
+                  className="focus-ring h-10 rounded-xl border border-[var(--portal-border)] bg-[var(--portal-surface)] px-3 text-xs text-[var(--portal-text)] transition-all duration-200"
                   value={specialty}
                   onChange={(event) => setSpecialty(event.target.value)}
                 >
@@ -92,15 +92,15 @@ export const DoctorFinderPage = () => {
                   ))}
                 </select>
 
-                <Input 
+                <input 
                   value={location} 
                   onChange={(event) => setLocation(event.target.value)} 
                   placeholder="Location" 
-                  className="h-9 rounded-xl bg-[var(--portal-surface)] border-[var(--portal-border)] text-xs text-[var(--portal-text)] px-3" 
+                  className="input-premium w-full text-xs h-10 px-3" 
                 />
 
                 <select
-                  className="focus-ring h-9 rounded-xl border border-[var(--portal-border)] bg-[var(--portal-surface)] px-3 text-xs text-[var(--portal-text)]"
+                  className="focus-ring h-10 rounded-xl border border-[var(--portal-border)] bg-[var(--portal-surface)] px-3 text-xs text-[var(--portal-text)] transition-all duration-200"
                   value={rating}
                   onChange={(event) => setRating(event.target.value)}
                 >
@@ -112,7 +112,7 @@ export const DoctorFinderPage = () => {
                   type="button"
                   onClick={() => setAvailableToday(prev => !prev)}
                   className={cn(
-                    "flex h-9 items-center justify-between rounded-xl border px-3.5 text-xs transition-all duration-200",
+                    "flex h-10 items-center justify-between rounded-xl border px-3.5 text-xs font-semibold transition-all duration-200",
                     availableToday
                       ? "bg-[#0ea5e9]/10 border-[#0ea5e9]/30 text-[#0ea5e9]"
                       : "bg-[var(--portal-surface)] border-[var(--portal-border)] text-[var(--portal-muted)] hover:bg-[var(--portal-elevated)]"
@@ -127,7 +127,7 @@ export const DoctorFinderPage = () => {
             {/* Map Anchored Indicator */}
             <article className="app-card p-5 shadow-sm relative overflow-hidden flex flex-col justify-between">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(14,165,233,0.04),transparent_45%),radial-gradient(circle_at_72%_58%,rgba(14,165,233,0.02),transparent_42%)] pointer-events-none" />
-              <p className="text-[9px] font-semibold uppercase tracking-wider text-[var(--portal-muted)]">Location Nodes</p>
+              <p className="text-label-premium text-[var(--portal-muted)]">Location Nodes</p>
               
               <div className="relative mt-2.5 h-[80px] overflow-hidden rounded-xl border border-[var(--portal-border)] bg-[var(--portal-elevated)]">
                 <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(var(--portal-border) 1px, transparent 0)', backgroundSize: '10px 10px' }} />
@@ -140,7 +140,7 @@ export const DoctorFinderPage = () => {
 
           {/* Sorter */}
           <section className="flex flex-wrap items-center justify-between gap-3 pt-2">
-            <p className="text-xs text-[var(--portal-muted)] font-medium">Found {filteredDoctors.length} doctors near your coordinates</p>
+            <p className="text-secondary-premium text-[var(--portal-muted)] font-medium">Found {filteredDoctors.length} doctors near your coordinates</p>
             <div className="inline-flex rounded-xl border border-[var(--portal-border)] bg-[var(--portal-surface)] p-1">
               {(['Relevance', 'Rating', 'Distance', 'Availability'] as const).map((mode) => (
                 <button
@@ -148,7 +148,7 @@ export const DoctorFinderPage = () => {
                   type="button"
                   onClick={() => setSortBy(mode)}
                   className={cn(
-                    "rounded-lg px-3 py-1 text-[10px] font-semibold uppercase tracking-wide transition-all border border-transparent",
+                    "rounded-lg px-3 py-1 text-[10px] font-bold uppercase tracking-wider transition-all border border-transparent",
                     sortBy === mode 
                       ? 'bg-[var(--portal-elevated)] text-[#0ea5e9] border-[var(--portal-border)]' 
                       : 'text-[var(--portal-muted)] hover:text-[var(--portal-text)]'
@@ -184,32 +184,32 @@ export const DoctorFinderPage = () => {
                             .slice(0, 2)}
                         </div>
                         <div>
-                          <h3 className="font-display text-sm font-bold tracking-tight text-[var(--portal-text)] leading-tight">{doctor.name}</h3>
-                          <p className="mt-1 text-[10px] text-[var(--portal-muted)] font-medium leading-none">{doctor.hospital}</p>
+                          <h3 className="text-body-premium text-[var(--portal-text)] font-semibold leading-tight">{doctor.name}</h3>
+                          <p className="text-secondary-premium text-[var(--portal-muted)] mt-1">{doctor.hospital}</p>
                         </div>
                       </div>
 
                       {/* AI Match badge */}
-                      <span className="inline-flex rounded-full bg-[#0ea5e9]/10 border border-[#0ea5e9]/20 px-2.5 py-0.5 text-[9px] font-semibold text-[#0ea5e9] shadow-sm">
+                      <span className="inline-flex rounded-full bg-[#0ea5e9]/10 border border-[#0ea5e9]/20 px-2.5 py-0.5 text-[10px] font-bold text-[#0ea5e9] shadow-sm uppercase tracking-wider">
                         {Math.round(Math.min(99, doctor.rating * 20 + 8))}% Match
                       </span>
                     </div>
 
                     {/* Tags */}
                     <div className="mt-4 flex flex-wrap gap-1.5">
-                      <span className="inline-flex rounded-full border border-[var(--portal-border)] bg-[var(--portal-elevated)] px-2.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-[var(--portal-text)]">
+                      <span className="inline-flex rounded-full border border-[var(--portal-border)] bg-[var(--portal-elevated)] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[var(--portal-text)]">
                         {doctor.specialty}
                       </span>
-                      <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                      <span className="inline-flex items-center gap-1 rounded-full border border-success/20 bg-success/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-success">
                         <CheckCircle2 className="h-3 w-3" />
                         Verified
                       </span>
                     </div>
 
                     {/* Metadata details */}
-                    <div className="mt-5 space-y-2 text-xs text-[var(--portal-muted)] font-medium">
+                    <div className="mt-5 space-y-2 text-secondary-premium text-[var(--portal-muted)]">
                       <div className="flex items-center gap-2">
-                        <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-500" />
+                        <Star className="h-3.5 w-3.5 text-warning fill-warning" />
                         <span className="text-[var(--portal-text)] font-bold">{doctor.rating}</span>
                         <span>({doctor.reviews} reviews)</span>
                       </div>
@@ -227,23 +227,22 @@ export const DoctorFinderPage = () => {
                   {/* Pricing and booking */}
                   <div className="mt-6 pt-4 border-t border-[var(--portal-border)] space-y-4">
                     <div className="flex items-center justify-between">
-                      <p className="text-[10px] uppercase font-bold tracking-wider text-[var(--portal-muted)]">Consultation Fee</p>
-                      <p className="font-display text-base font-bold text-[var(--portal-text)]">₹{doctor.fee}</p>
+                      <p className="text-label-premium text-[var(--portal-muted)]">Consultation Fee</p>
+                      <p className="text-card-title text-[var(--portal-text)] font-bold">₹{doctor.fee}</p>
                     </div>
 
                     <div className="grid grid-cols-2 gap-2">
-                      <Button 
-                        variant="outline"
-                        className="h-9 rounded-xl border-[var(--portal-border)] bg-[var(--portal-surface)] text-xs font-semibold text-[var(--portal-text)] hover:bg-[var(--portal-elevated)] transition-all duration-200" 
+                      <button 
+                        className="btn-premium btn-premium-secondary h-9 text-xs rounded-xl" 
                         onClick={() => setSelectedDoctor(doctor)}
                       >
                         Profile
-                      </Button>
-                      <Button
-                        className="btn-premium-primary h-9 rounded-xl text-xs font-semibold"
+                      </button>
+                      <button
+                        className="btn-premium btn-premium-primary h-9 text-xs rounded-xl"
                       >
                         Book Slot
-                      </Button>
+                      </button>
                     </div>
                   </div>
                 </article>
@@ -271,49 +270,49 @@ export const DoctorFinderPage = () => {
                 className="fixed right-0 top-0 z-50 h-full w-full max-w-[420px] overflow-y-auto border-l border-[var(--portal-border)] bg-[var(--portal-surface)] p-6 shadow-2xl space-y-6 text-[var(--portal-text)]"
               >
                 <div className="flex items-center justify-between border-b border-[var(--portal-border)] pb-4">
-                  <h3 className="font-display text-lg font-bold tracking-tight">{selectedDoctor.name}</h3>
-                  <Button variant="ghost" size="icon" onClick={() => setSelectedDoctor(null)} className="rounded-full text-[var(--portal-muted)] hover:text-[var(--portal-text)] hover:bg-[var(--portal-elevated)]">
+                  <h3 className="text-card-title font-bold tracking-tight">{selectedDoctor.name}</h3>
+                  <button onClick={() => setSelectedDoctor(null)} className="h-8 w-8 flex items-center justify-center rounded-full text-[var(--portal-muted)] hover:text-[var(--portal-text)] hover:bg-[var(--portal-elevated)] transition-colors">
                     <X className="h-5 w-5" />
-                  </Button>
+                  </button>
                 </div>
 
                 <div className="space-y-5">
                   <div className="rounded-2xl border border-[var(--portal-border)] bg-[var(--portal-elevated)]/50 p-5 space-y-3">
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-[#0ea5e9]">{selectedDoctor.specialty}</p>
-                    <p className="text-xs leading-relaxed text-[var(--portal-muted)] font-medium">{selectedDoctor.about}</p>
+                    <p className="text-label-premium text-[#0ea5e9]">{selectedDoctor.specialty}</p>
+                    <p className="text-secondary-premium leading-relaxed text-[var(--portal-muted)]">{selectedDoctor.about}</p>
                     <div className="mt-3 flex flex-wrap gap-2 pt-2">
-                      <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-0.5 text-[9px] font-semibold uppercase text-emerald-600 dark:text-emerald-400">
+                      <span className="inline-flex items-center gap-1 rounded-full border border-success/20 bg-success/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase text-success">
                         <ShieldCheck className="h-3.5 w-3.5" />
                         Credentials Verified
                       </span>
-                      <span className="inline-flex rounded-full border border-[var(--portal-border)] bg-[var(--portal-elevated)] px-2.5 py-0.5 text-[9px] font-semibold uppercase text-[var(--portal-muted)]">
+                      <span className="inline-flex rounded-full border border-[var(--portal-border)] bg-[var(--portal-elevated)] px-2.5 py-0.5 text-[10px] font-semibold uppercase text-[var(--portal-muted)]">
                         {selectedDoctor.experience} Yrs Experience
                       </span>
                     </div>
                   </div>
 
                   <div>
-                    <p className="mb-2.5 text-[9px] font-semibold uppercase tracking-[0.12em] text-[var(--portal-muted)]">Select Appointment Slot</p>
+                    <p className="mb-2.5 text-label-premium text-[var(--portal-muted)]">Select Appointment Slot</p>
                     <div className="grid grid-cols-3 gap-2">
                       {['10:00 AM', '11:30 AM', '2:00 PM', '4:30 PM', '6:00 PM', '7:30 PM'].map((slot) => (
-                        <button key={slot} type="button" className="focus-ring rounded-xl border border-[var(--portal-border)] bg-[var(--portal-surface)] hover:bg-[var(--portal-elevated)] px-2 py-2.5 text-xs font-semibold text-[var(--portal-text)] transition-all">
+                        <button key={slot} type="button" className="focus-ring h-[38px] flex items-center justify-center rounded-xl border border-[var(--portal-border)] bg-[var(--portal-surface)] hover:bg-[var(--portal-elevated)] px-2 text-xs font-semibold text-[var(--portal-text)] transition-all">
                           {slot}
                         </button>
                       ))}
                     </div>
                   </div>
 
-                  <div className="rounded-2xl border border-[var(--portal-border)] bg-[var(--portal-elevated)]/30 p-5 text-xs text-[var(--portal-muted)] space-y-3">
-                    <p className="font-semibold text-[var(--portal-text)]">Patient feedback highlights</p>
+                  <div className="rounded-2xl border border-[var(--portal-border)] bg-[var(--portal-elevated)]/30 p-5 text-secondary-premium text-[var(--portal-muted)] space-y-3">
+                    <p className="font-bold text-[var(--portal-text)]">Patient feedback highlights</p>
                     <p className="italic">"Compassionate doctor who explains biological indicators in detail."</p>
                     <p className="italic">"Helped customize my lifestyle nutrition targets based on lab markers."</p>
                   </div>
 
-                  <Button
-                    className="btn-premium-primary h-11 w-full rounded-xl text-xs font-semibold"
+                  <button
+                    className="btn-premium btn-premium-primary w-full"
                   >
                     Confirm Appointment Bookings
-                  </Button>
+                  </button>
                 </div>
               </motion.aside>
             </>
