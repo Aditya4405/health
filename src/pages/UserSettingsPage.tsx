@@ -54,8 +54,8 @@ export const UserSettingsPage = () => {
           
           {/* Header */}
           <div className="pb-4 border-b border-[var(--portal-border)]">
-            <h2 className="font-display text-lg font-bold tracking-tight text-[var(--portal-text)]">Preferences</h2>
-            <p className="text-[10px] text-[var(--portal-muted)] font-medium">Manage your personal healthcare profile account logs and companion preferences</p>
+            <h2 className="text-section-title text-[var(--portal-text)]">Preferences</h2>
+            <p className="text-[11px] text-[var(--portal-muted)] font-semibold uppercase tracking-wider mt-0.5">Manage your personal healthcare profile account logs and companion preferences</p>
           </div>
 
           {/* Account Profile Section */}
@@ -104,16 +104,16 @@ export const UserSettingsPage = () => {
 
                 <div className="space-y-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="font-display text-base font-bold text-[var(--portal-text)]">{user?.name ?? 'Aarav Kapoor'}</h3>
-                    <Badge className="border border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[9px] font-bold tracking-wide uppercase px-2 py-0.5 rounded-full">
+                    <h3 className="text-card-title text-[var(--portal-text)] font-bold">{user?.name ?? 'Aarav Kapoor'}</h3>
+                    <span className="border border-success/20 bg-success/10 text-success text-[10px] font-bold tracking-wide uppercase px-2 py-0.5 rounded-full">
                       Verified Profile
-                    </Badge>
+                    </span>
                   </div>
-                  <p className="text-[10px] text-[var(--portal-muted)] font-medium leading-none flex items-center gap-1.5 mt-0.5">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <p className="text-[11px] text-[var(--portal-muted)] font-semibold uppercase tracking-wider flex items-center gap-1.5 mt-0.5">
+                    <span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
                     Health synced • Companion Active
                   </p>
-                  <p className="text-[9px] text-[var(--portal-muted)] leading-none pt-1">
+                  <p className="text-secondary-premium text-[var(--portal-muted)] pt-1">
                     Last sync: Just now
                   </p>
                 </div>
@@ -121,43 +121,43 @@ export const UserSettingsPage = () => {
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-1">
-                  <label className="text-[9px] font-semibold uppercase tracking-wider text-[var(--portal-muted)] ml-1">Full Name</label>
-                  <Input placeholder="Full name" defaultValue="Aarav Kapoor" className="h-10 rounded-xl bg-[var(--portal-surface)] border-[var(--portal-border)] text-xs text-[var(--portal-text)] animate-none focus-visible:ring-0" />
+                  <label className="text-label-premium text-[var(--portal-muted)] ml-1">Full Name</label>
+                  <input placeholder="Full name" defaultValue={user?.name ?? 'Aarav Kapoor'} className="input-premium w-full" />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[9px] font-semibold uppercase tracking-wider text-[var(--portal-muted)] ml-1">Email Address</label>
-                  <Input placeholder="Email" defaultValue="patient@mediscan.ai" className="h-10 rounded-xl bg-[var(--portal-surface)] border-[var(--portal-border)] text-xs text-[var(--portal-text)] animate-none focus-visible:ring-0" />
+                  <label className="text-label-premium text-[var(--portal-muted)] ml-1">Email Address</label>
+                  <input placeholder="Email" defaultValue="patient@mediscan.ai" className="input-premium w-full" />
                 </div>
                 <div className="space-y-1 sm:col-span-2">
-                  <label className="text-[9px] font-semibold uppercase tracking-wider text-[var(--portal-muted)] ml-1">Phone Number</label>
-                  <Input placeholder="Phone" defaultValue="+91 98765 43210" className="h-10 rounded-xl bg-[var(--portal-surface)] border-[var(--portal-border)] text-xs text-[var(--portal-text)] animate-none focus-visible:ring-0" />
+                  <label className="text-label-premium text-[var(--portal-muted)] ml-1">Phone Number</label>
+                  <input placeholder="Phone" defaultValue="+91 98765 43210" className="input-premium w-full" />
                 </div>
               </div>
 
               <div className="pt-2 flex gap-3">
-                <Button className="btn-premium-primary h-10 rounded-xl px-5 text-xs font-semibold tracking-wide">
+                <button className="btn-premium btn-premium-primary">
                   Save Changes
-                </Button>
-                <Button variant="ghost" className="h-10 rounded-xl px-5 text-xs font-semibold tracking-wide text-[var(--portal-muted)] hover:bg-[var(--portal-elevated)] transition-all">
+                </button>
+                <button className="btn-premium btn-premium-secondary">
                   Cancel
-                </Button>
+                </button>
               </div>
             </article>
 
             {/* Completion indicator */}
-            <article className="app-card p-6 shadow-sm flex flex-col items-center justify-between text-center relative overflow-hidden">
+            <article className="app-card p-6 shadow-sm flex flex-col items-center justify-center gap-4 text-center relative overflow-hidden">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(14,165,233,0.04),transparent_60%)] pointer-events-none" />
-              <p className="text-[9px] font-semibold uppercase tracking-wider text-[var(--portal-muted)]">Completion Status</p>
+              <p className="text-label-premium text-[var(--portal-muted)]">Completion Status</p>
               
-              <div className="my-3">
+              <div className="my-1">
                 <CompletionRing progress={82} />
               </div>
               
               <div className="space-y-2">
-                <p className="text-[10px] text-[var(--portal-muted)] font-medium leading-relaxed">
+                <p className="text-secondary-premium text-[var(--portal-muted)] leading-relaxed">
                   Provide emergency contact history to complete security verification.
                 </p>
-                <Badge className="border border-[var(--portal-border)] bg-[var(--portal-elevated)] text-[var(--portal-muted)] text-[9px] font-bold tracking-wide uppercase px-2.5 py-0.5 rounded-full">Pro Account</Badge>
+                <span className="border border-[var(--portal-border)] bg-[var(--portal-elevated)] text-[var(--portal-muted)] text-[10px] font-bold tracking-wide uppercase px-2.5 py-0.5 rounded-full inline-block">Pro Account</span>
               </div>
             </article>
           </section>
@@ -169,7 +169,7 @@ export const UserSettingsPage = () => {
             <article className="app-card p-6 md:p-8 shadow-sm space-y-4">
               <div className="flex items-center gap-2 pb-2 border-b border-[var(--portal-border)]">
                 <Bell className="h-4 w-4 text-[#0ea5e9]" />
-                <h3 className="font-display text-sm font-bold tracking-tight text-[var(--portal-text)]">System Alerts</h3>
+                <h3 className="text-card-title text-[var(--portal-text)] font-bold">System Alerts</h3>
               </div>
               <div className="divide-y divide-[var(--portal-border)]">
                 <SettingRow label="Critical health indicators" description="Alerts for critical biomarker variances." />
@@ -182,7 +182,7 @@ export const UserSettingsPage = () => {
             <article className="app-card p-6 md:p-8 shadow-sm space-y-4">
               <div className="flex items-center gap-2 pb-2 border-b border-[var(--portal-border)]">
                 <ShieldCheck className="h-4 w-4 text-[#0ea5e9]" />
-                <h3 className="font-display text-sm font-bold tracking-tight text-[var(--portal-text)]">Security & Theme</h3>
+                <h3 className="text-card-title text-[var(--portal-text)] font-bold">Security & Theme</h3>
               </div>
               <div className="divide-y divide-[var(--portal-border)]">
                 <SecurityRowItem
@@ -195,14 +195,12 @@ export const UserSettingsPage = () => {
                   title="Dark theme preference"
                   body={`Display mode: ${theme}`}
                   action={
-                    <Button 
-                      size="sm"
-                      variant="outline"
-                      className="h-8 rounded-lg border border-[var(--portal-border)] bg-[var(--portal-surface)] text-[9px] font-bold tracking-wide uppercase text-[var(--portal-muted)] hover:bg-[var(--portal-elevated)] transition-all" 
+                    <button 
+                      className="btn-premium btn-premium-secondary h-8 px-3 text-[10px] font-bold uppercase tracking-wider" 
                       onClick={toggleTheme}
                     >
                       Toggle
-                    </Button>
+                    </button>
                   }
                 />
               </div>
@@ -216,7 +214,7 @@ export const UserSettingsPage = () => {
             <article className="app-card p-6 md:p-8 shadow-sm space-y-4">
               <div className="flex items-center gap-2 pb-2 border-b border-[var(--portal-border)]">
                 <Sparkles className="h-4 w-4 text-[#0ea5e9]" />
-                <h3 className="font-display text-sm font-bold tracking-tight text-[var(--portal-text)]">AI Personalization</h3>
+                <h3 className="text-card-title text-[var(--portal-text)] font-bold">AI Personalization</h3>
               </div>
               <div className="divide-y divide-[var(--portal-border)]">
                 <SettingRow label="Detailed medical contexts" description="Include clinical insights in AI explanations." defaultChecked />
@@ -232,27 +230,27 @@ export const UserSettingsPage = () => {
               <div className="space-y-4">
                 <div className="flex items-center gap-2 pb-2 border-b border-[var(--portal-border)]">
                   <CreditCard className="h-4 w-4 text-[#0ea5e9]" />
-                  <h3 className="font-display text-sm font-bold tracking-tight text-[var(--portal-text)]">Billing & Plan</h3>
+                  <h3 className="text-card-title text-[var(--portal-text)] font-bold">Billing & Plan</h3>
                 </div>
 
                 <div className="rounded-xl border border-[var(--portal-border)] bg-[var(--portal-elevated)]/50 p-4 flex justify-between items-center">
                   <div>
-                    <h4 className="font-display text-sm font-bold text-[var(--portal-text)]">MediScan Pro</h4>
-                    <p className="mt-1 text-[10px] text-[var(--portal-muted)]">₹299/mo • Renews May 20, 2026</p>
+                    <h4 className="text-body-premium font-semibold text-[var(--portal-text)]">MediScan Pro</h4>
+                    <p className="text-secondary-premium text-[var(--portal-muted)] mt-1">₹299/mo • Renews May 20, 2026</p>
                   </div>
-                  <span className="bg-gradient-to-r from-[#0ea5e9] to-[#0284c7] text-white text-[9px] font-bold tracking-wider uppercase px-3 py-1 rounded-full shadow-[0_0_12px_rgba(14,165,233,0.25)] border border-[#0ea5e9]/20">
+                  <span className="bg-gradient-to-r from-[#0ea5e9] to-[#0284c7] text-white text-[10px] font-bold tracking-wider uppercase px-3 py-1 rounded-full shadow-[0_0_12px_rgba(14,165,233,0.25)] border border-[#0ea5e9]/20">
                     Pro Active
                   </span>
                 </div>
               </div>
 
               <div className="mt-6 flex gap-2">
-                <Button variant="outline" className="h-9 w-full rounded-lg border border-[var(--portal-border)] bg-[var(--portal-surface)] text-[10px] font-semibold uppercase tracking-wide text-[var(--portal-text)] hover:bg-[var(--portal-elevated)] transition-all">
+                <button className="btn-premium btn-premium-secondary w-full text-[11px] h-9 px-3">
                   Change Plan
-                </Button>
-                <Button variant="outline" className="h-9 w-full rounded-lg border border-[var(--portal-border)] bg-[var(--portal-surface)] text-[10px] font-semibold uppercase tracking-wide text-[var(--portal-text)] hover:bg-[var(--portal-elevated)] transition-all">
+                </button>
+                <button className="btn-premium btn-premium-secondary w-full text-[11px] h-9 px-3">
                   Manage Billing
-                </Button>
+                </button>
               </div>
             </article>
 
@@ -279,8 +277,8 @@ const CompletionRing = ({ progress }: { progress: number }) => (
 const SettingRow = ({ label, description, defaultChecked = false }: { label: string; description: string; defaultChecked?: boolean }) => (
   <div className="flex items-center justify-between gap-3 py-3.5 first:pt-1 last:pb-1">
     <div className="space-y-0.5">
-      <p className="text-xs font-bold text-[var(--portal-text)] tracking-tight">{label}</p>
-      <p className="text-[10px] text-[var(--portal-muted)] leading-relaxed font-medium">{description}</p>
+      <p className="text-body-premium font-semibold text-[var(--portal-text)]">{label}</p>
+      <p className="text-secondary-premium text-[var(--portal-muted)]">{description}</p>
     </div>
     <Switch defaultChecked={defaultChecked} className="data-[state=checked]:bg-[#0ea5e9]" />
   </div>
@@ -301,8 +299,8 @@ const SecurityRowItem = ({
     <div className="flex items-start gap-2.5">
       <Icon className="h-4.5 w-4.5 mt-0.5 text-[#0ea5e9]" />
       <div className="space-y-0.5">
-        <p className="text-xs font-bold text-[var(--portal-text)] tracking-tight">{title}</p>
-        <p className="text-[10px] text-[var(--portal-muted)] leading-relaxed font-medium">{body}</p>
+        <p className="text-body-premium font-semibold text-[var(--portal-text)]">{title}</p>
+        <p className="text-secondary-premium text-[var(--portal-muted)]">{body}</p>
       </div>
     </div>
     {action ?? <Switch className="data-[state=checked]:bg-[#0ea5e9]" />}
