@@ -56,36 +56,38 @@ export const PatientDashboardPage = () => {
               <div className="absolute right-0 top-0 -mr-20 -mt-20 h-64 w-64 rounded-full bg-gradient-to-tr from-[#0ea5e9]/10 to-[#0284c7]/10 blur-[80px] pointer-events-none dark:from-[#0ea5e9]/20 dark:to-[#0284c7]/20" />
 
               <div className="flex items-center gap-2">
-                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 shadow-sm">
+                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-success/10 text-success border border-success/20 shadow-sm">
                   <Heart className="h-4 w-4 fill-current" />
                 </span>
-                <span className="text-[10px] font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                <span className="text-label-premium text-success">
                   AI Healthcare Companion
                 </span>
               </div>
 
-              <h2 className="mt-6 font-display text-2xl md:text-3xl font-bold tracking-tight text-[var(--portal-text)] leading-tight">
-                Good news, {firstName} —<br />
-                <span className="text-[var(--portal-muted)]">
-                  your latest health markers are improving.
-                </span>
-              </h2>
+              <div className="max-w-2xl">
+                <h2 className="mt-6 text-page-title text-[var(--portal-text)]">
+                  Good news, {firstName} —<br />
+                  <span className="text-[var(--portal-muted)]">
+                    your latest health markers are improving.
+                  </span>
+                </h2>
 
-              <p className="mt-4 max-w-xl text-xs md:text-sm leading-relaxed text-[var(--portal-muted)] font-medium">
-                Your iron levels have stabilized, though cholesterol still needs attention. We suggest scheduling a brief clinic checkup.
-              </p>
+                <p className="mt-4 text-body-premium text-[var(--portal-muted)]">
+                  Your iron levels have stabilized, though cholesterol still needs attention. We suggest scheduling a brief clinic checkup.
+                </p>
+              </div>
 
               {/* Layered indicators */}
-              <div className="mt-6 flex flex-wrap gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--portal-elevated)] border border-[var(--portal-border)] px-3 py-1 text-[10px] font-semibold tracking-wide text-amber-600 dark:text-amber-400 shadow-sm">
+              <div className="mt-6 flex flex-wrap gap-2.5">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--portal-elevated)] border border-[var(--portal-border)] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-warning shadow-sm">
                   <ShieldAlert className="h-3.5 w-3.5" />
                   LDL Cholesterol Watch
                 </span>
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--portal-elevated)] border border-[var(--portal-border)] px-3 py-1 text-[10px] font-semibold tracking-wide text-emerald-600 dark:text-emerald-400 shadow-sm">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--portal-elevated)] border border-[var(--portal-border)] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-success shadow-sm">
                   <CheckCircle2 className="h-3.5 w-3.5" />
                   Iron Levels Normal
                 </span>
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--portal-elevated)] border border-[var(--portal-border)] px-3 py-1 text-[10px] font-semibold tracking-wide text-[#0ea5e9] shadow-sm">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--portal-elevated)] border border-[var(--portal-border)] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-[#0ea5e9] shadow-sm">
                   <Stethoscope className="h-3.5 w-3.5" />
                   Follow-up in 2 weeks
                 </span>
@@ -94,15 +96,15 @@ export const PatientDashboardPage = () => {
               {/* Reflective Buttons */}
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link to="/app/patient/upload">
-                  <Button className="btn-premium-primary h-10 rounded-xl px-5 text-xs font-semibold tracking-wide transition-all duration-200">
+                  <button className="btn-premium btn-premium-primary">
                     <Sparkles className="mr-1.5 h-3.5 w-3.5" />
                     Upload Lab Results
-                  </Button>
+                  </button>
                 </Link>
                 <Link to="/app/patient/chat">
-                  <Button className="h-10 rounded-xl border border-[var(--portal-border)] bg-[var(--portal-surface)] hover:bg-[var(--portal-elevated)] px-5 text-xs font-semibold tracking-wide text-[var(--portal-text)] transition-all duration-200">
+                  <button className="btn-premium btn-premium-secondary">
                     Consult Companion AI
-                  </Button>
+                  </button>
                 </Link>
               </div>
             </article>
@@ -110,25 +112,25 @@ export const PatientDashboardPage = () => {
             {/* Things To Review - Spans 7 columns on large desktop */}
             <article className="col-span-12 lg:col-span-7 app-card app-card-hover p-6 relative overflow-hidden transition-all duration-300">
               <div className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-                <span className="text-[10px] font-semibold uppercase tracking-wider text-[var(--portal-muted)]">Things To Review</span>
+                <span className="h-1.5 w-1.5 rounded-full bg-warning" />
+                <span className="text-label-premium text-[var(--portal-muted)]">Things To Review</span>
               </div>
 
-              <h4 className="mt-3 font-display text-base font-bold text-[var(--portal-text)] tracking-tight">LDL Cholesterol</h4>
+              <h4 className="mt-3 text-card-title text-[var(--portal-text)]">LDL Cholesterol</h4>
               
-              <p className="mt-2 text-xs leading-relaxed text-[var(--portal-muted)] font-medium">
+              <p className="mt-2 text-secondary-premium text-[var(--portal-muted)]">
                 Your LDL levels are slightly elevated (180 mg/dL). We recommend focusing on a fiber-rich nutrition plan and introducing regular light cardio.
               </p>
 
               <div className="mt-6 flex items-center justify-between pt-4 border-t border-[var(--portal-border)]">
-                <span className="inline-flex items-center gap-1.5 text-[10px] text-amber-600 dark:text-amber-400 font-semibold uppercase tracking-wider">
+                <span className="inline-flex items-center gap-1.5 text-[11px] text-warning font-semibold uppercase tracking-wider">
                   <ShieldAlert className="h-3.5 w-3.5" />
                   Moderate Priority
                 </span>
                 <Link to="/app/patient/reports">
-                  <Button size="sm" variant="ghost" className="h-8 rounded-lg border border-[var(--portal-border)] px-3.5 text-[10px] font-semibold tracking-wide text-[var(--portal-text)] hover:bg-[var(--portal-elevated)] transition-all">
+                  <button className="btn-premium btn-premium-secondary h-8 px-3 text-[11px] rounded-lg">
                     View Details
-                  </Button>
+                  </button>
                 </Link>
               </div>
             </article>
@@ -137,24 +139,24 @@ export const PatientDashboardPage = () => {
             <article className="col-span-12 lg:col-span-5 app-card app-card-hover p-6 relative overflow-hidden transition-all duration-300">
               <div className="flex items-center gap-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-[#0ea5e9]" />
-                <span className="text-[10px] font-semibold uppercase tracking-wider text-[var(--portal-muted)]">Next Action</span>
+                <span className="text-label-premium text-[var(--portal-muted)]">Next Action</span>
               </div>
 
-              <h4 className="mt-3 font-display text-base font-bold text-[var(--portal-text)] tracking-tight">Schedule follow-up</h4>
+              <h4 className="mt-3 text-card-title text-[var(--portal-text)]">Schedule follow-up</h4>
 
-              <p className="mt-2 text-xs leading-relaxed text-[var(--portal-muted)] font-medium">
+              <p className="mt-2 text-secondary-premium text-[var(--portal-muted)]">
                 Consult a general physician or cardiologist in 2 weeks to verify that your iron metrics remain stabilized.
               </p>
 
               <div className="mt-6 flex items-center justify-between pt-4 border-t border-[var(--portal-border)]">
-                <span className="inline-flex items-center gap-1.5 text-[10px] text-[#0ea5e9] font-semibold uppercase tracking-wider">
+                <span className="inline-flex items-center gap-1.5 text-[11px] text-[#0ea5e9] font-semibold uppercase tracking-wider">
                   <Stethoscope className="h-3.5 w-3.5" />
                   Clinical Review
                 </span>
                 <Link to="/app/patient/doctors">
-                  <Button size="sm" className="btn-premium-primary h-8 rounded-lg px-4 text-[10px] font-semibold tracking-wide">
+                  <button className="btn-premium btn-premium-primary h-8 px-3 text-[11px] rounded-lg">
                     Find Doctor
-                  </Button>
+                  </button>
                 </Link>
               </div>
             </article>
@@ -163,8 +165,8 @@ export const PatientDashboardPage = () => {
             <article className="col-span-12 space-y-3">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-display text-sm font-bold text-[var(--portal-text)] tracking-tight">Recent Records</h3>
-                  <p className="text-[10px] text-[var(--portal-muted)]">Laboratory analyses verified by MediScan AI</p>
+                  <h3 className="text-card-title text-[var(--portal-text)]">Recent Records</h3>
+                  <p className="text-[11px] text-[var(--portal-muted)] font-semibold uppercase tracking-wider mt-0.5">Laboratory analyses verified by MediScan AI</p>
                 </div>
                 <Link to="/app/patient/reports" className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#0ea5e9] hover:text-[#0284c7] transition-colors">
                   Open Health History <ArrowRight className="h-3 w-3" />
@@ -182,26 +184,26 @@ export const PatientDashboardPage = () => {
                         <FileText className="h-4.5 w-4.5" />
                       </span>
                       <div>
-                        <p className="text-xs font-semibold text-[var(--portal-text)] tracking-tight">{report.name}</p>
-                        <p className="text-[10px] text-[var(--portal-muted)] mt-0.5">{report.type} • {report.date}</p>
+                        <p className="text-body-premium text-[var(--portal-text)] font-semibold">{report.name}</p>
+                        <p className="text-secondary-premium text-[var(--portal-muted)] mt-0.5">{report.type} • {report.date}</p>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-2.5">
                       <span className={cn(
-                        "text-[9px] font-semibold px-2 py-0.5 rounded-full border uppercase tracking-wider",
-                        report.trend === 'improving' && "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
-                        report.trend === 'attention' && "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
+                        "text-[10px] font-semibold px-2.5 py-0.5 rounded-full border uppercase tracking-wider",
+                        report.trend === 'improving' && "bg-success/10 text-success border-success/20",
+                        report.trend === 'attention' && "bg-warning/10 text-warning border-warning/20",
                         report.trend === 'stable' && "bg-zinc-500/10 text-zinc-600 dark:text-zinc-400 border-zinc-500/20"
                       )}>
                         {report.trend === 'improving' ? '↗ Stable' : report.trend === 'attention' ? '⚠ Review' : '→ Normal'}
                       </span>
 
                       <span className={cn(
-                        "rounded-full px-2.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider border shadow-sm",
+                        "rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider border shadow-sm",
                         report.status === 'ALERT'
-                          ? "bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20"
-                          : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+                          ? "bg-danger/10 text-danger border-danger/20"
+                          : "bg-success/10 text-success border-success/20"
                       )}>
                         {report.statusText}
                       </span>
