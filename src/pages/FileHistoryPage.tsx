@@ -95,37 +95,37 @@ export const FileHistoryPage = () => {
           {/* Timeline Header Area */}
           <section className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-between pb-4 border-b border-[var(--portal-border)]">
             <div>
-              <h2 className="font-display text-lg font-bold tracking-tight text-[var(--portal-text)]">Health Records</h2>
-              <p className="text-[10px] text-[var(--portal-muted)]">Complete clinical timeline logs and biomarker reports</p>
+              <h2 className="text-section-title text-[var(--portal-text)]">Health Records</h2>
+              <p className="text-[11px] text-[var(--portal-muted)] font-semibold uppercase tracking-wider mt-0.5">Complete clinical timeline logs and biomarker reports</p>
             </div>
             <div className="flex flex-wrap sm:flex-nowrap gap-3 items-center">
               <div className="relative flex-1 sm:w-64">
-                <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[var(--portal-muted)]" />
-                <Input 
+                <Search className="pointer-events-none absolute left-3.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[var(--portal-muted)]" />
+                <input 
                   placeholder="Search health records..." 
-                  className="h-10 rounded-xl pl-9 pr-4 bg-[var(--portal-surface)] border-[var(--portal-border)] text-xs text-[var(--portal-text)]"
+                  className="input-premium !pl-10 w-full"
                   value={searchTerm}
                   onChange={e => setSearchTerm(e.target.value)}
                 />
               </div>
               <Link to="/app/patient/upload" className="w-full sm:w-auto">
-                <Button
-                  className="btn-premium-primary h-10 w-full sm:w-auto rounded-xl px-5 text-xs font-semibold tracking-wide"
+                <button
+                  className="btn-premium btn-premium-primary w-full sm:w-auto"
                 >
                   <UploadCloud className="mr-1.5 h-4 w-4" />
                   Upload Lab Results
-                </Button>
+                </button>
               </Link>
             </div>
           </section>
 
           {/* Dotted clinical timeline */}
-          <section className="relative pl-6 md:pl-8 space-y-6">
+          <section className="relative pl-8 md:pl-12 space-y-6">
             {/* Dotted Axis */}
-            <div className="absolute left-[11px] md:left-[15px] top-4 bottom-4 w-[2px] bg-gradient-to-b from-[#0ea5e9]/40 via-[var(--portal-border)] to-[var(--portal-border)] border-dashed border-l border-[var(--portal-border)]" />
+            <div className="absolute left-[15px] md:left-[23px] top-4 bottom-4 w-[2px] bg-gradient-to-b from-[#0ea5e9]/40 via-[var(--portal-border)] to-[var(--portal-border)] border-dashed border-l border-[var(--portal-border)]" />
 
             {filteredFiles.length === 0 ? (
-              <div className="text-center py-16 text-[var(--portal-muted)]">
+              <div className="text-center py-16 text-secondary-premium text-[var(--portal-muted)]">
                 No matching reports located in your profile logs.
               </div>
             ) : (
@@ -136,14 +136,14 @@ export const FileHistoryPage = () => {
                     
                     {/* Glowing timeline node */}
                     <div className={cn(
-                      "absolute -left-[29px] md:-left-[37px] top-[18px] z-10 flex h-6 w-6 md:h-8 md:w-8 items-center justify-center rounded-full border shadow-sm transition-all duration-300",
+                      "absolute -left-[28px] md:-left-[40px] top-[18px] z-10 flex h-6 w-6 md:h-8 md:w-8 items-center justify-center rounded-full border shadow-sm transition-all duration-300",
                       file.statusTone === 'warning'
-                        ? "bg-amber-500/10 border-amber-500/20 text-amber-500"
-                        : "bg-emerald-500/10 border-emerald-500/20 text-emerald-500"
+                        ? "bg-warning/10 border-warning/20 text-warning"
+                        : "bg-success/10 border-success/20 text-success"
                     )}>
                       <span className={cn(
                         "h-2 w-2 rounded-full",
-                        file.statusTone === 'warning' ? "bg-amber-500" : "bg-emerald-500"
+                        file.statusTone === 'warning' ? "bg-warning" : "bg-success"
                       )} />
                     </div>
 
@@ -153,15 +153,15 @@ export const FileHistoryPage = () => {
                       <button
                         type="button"
                         onClick={() => toggleExpand(file.id)}
-                        className="flex w-full items-center justify-between p-5 text-left transition-colors hover:bg-[var(--portal-elevated)]/50"
+                        className="flex w-full items-center justify-between py-3.5 px-5 text-left transition-colors hover:bg-[var(--portal-elevated)]/50"
                       >
                         <div className="flex items-center gap-3.5">
                           <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--portal-elevated)] border border-[var(--portal-border)] text-[#0ea5e9]">
                             <FileText className="h-5 w-5" />
                           </span>
                           <div>
-                            <h4 className="font-display text-sm font-bold text-[var(--portal-text)] tracking-tight">{file.name}</h4>
-                            <p className="mt-0.5 text-[10px] text-[var(--portal-muted)]">
+                            <h4 className="text-body-premium text-[var(--portal-text)] font-semibold">{file.name}</h4>
+                            <p className="text-secondary-premium text-[var(--portal-muted)] mt-0.5">
                               {file.type} • {file.uploaded}
                             </p>
                           </div>
@@ -170,20 +170,20 @@ export const FileHistoryPage = () => {
                         <div className="flex items-center gap-4">
                           {/* Mini Trend Arrow */}
                           <span className={cn(
-                            "flex items-center gap-1 text-[9px] font-semibold px-2 py-0.5 rounded-full border uppercase tracking-wider",
+                            "flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full border uppercase tracking-wider",
                             file.trend === 'up'
-                              ? "bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-400"
-                              : "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400"
+                              ? "bg-warning/10 border-warning/20 text-warning"
+                              : "bg-success/10 border-success/20 text-success"
                           )}>
                             {file.trend === 'up' ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
                             {file.trend === 'up' ? 'Watch' : 'Stable'}
                           </span>
 
                           <span className={cn(
-                            "rounded-full px-2.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider border",
+                            "rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider border",
                             file.statusTone === 'warning'
-                              ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
-                              : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+                              ? "bg-warning/10 text-warning border-warning/20"
+                              : "bg-success/10 text-success border-success/20"
                           )}>
                             {file.status}
                           </span>
@@ -208,24 +208,24 @@ export const FileHistoryPage = () => {
                               
                               {/* Summary */}
                               <div className="space-y-1">
-                                <p className="text-[9px] font-semibold uppercase tracking-wider text-[var(--portal-muted)]">AI Companion Summary</p>
-                                <p className="text-xs leading-relaxed text-[var(--portal-text)] font-medium">{file.summary}</p>
+                                <p className="text-label-premium text-[var(--portal-muted)]">AI Companion Summary</p>
+                                <p className="text-body-premium text-[var(--portal-text)]">{file.summary}</p>
                               </div>
 
                               {/* Biomarker details table */}
                               <div className="space-y-2">
-                                <p className="text-[9px] font-semibold uppercase tracking-wider text-[var(--portal-muted)]">Analyzed Biomarkers</p>
+                                <p className="text-label-premium text-[var(--portal-muted)]">Analyzed Biomarkers</p>
                                 <div className="grid gap-2.5 sm:grid-cols-2">
                                   {file.biomarkers.map((bio) => (
-                                    <div key={bio.name} className="flex items-center justify-between rounded-xl border border-[var(--portal-border)] bg-[var(--portal-surface)] px-4 py-3 text-xs">
+                                    <div key={bio.name} className="flex items-center justify-between rounded-xl border border-[var(--portal-border)] bg-[var(--portal-surface)] px-4 py-3 text-secondary-premium">
                                       <span className="font-semibold text-[var(--portal-text)]">{bio.name}</span>
                                       <div className="flex items-center gap-2">
                                         <span className="font-bold text-[var(--portal-text)]">{bio.value}</span>
                                         <span className={cn(
-                                          "rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase border",
+                                          "rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase border",
                                           bio.status === 'Normal' || bio.status === 'Optimal'
-                                            ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
-                                            : "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
+                                            ? "bg-success/10 border-success/20 text-success"
+                                            : "bg-warning/10 border-warning/20 text-warning"
                                         )}>
                                           {bio.status}
                                         </span>
@@ -236,10 +236,10 @@ export const FileHistoryPage = () => {
                               </div>
 
                               {/* Companion note */}
-                              <div className="rounded-xl border border-[var(--portal-border)] bg-[var(--portal-elevated)]/50 p-4 text-xs text-[var(--portal-muted)] flex items-start gap-2.5">
+                              <div className="rounded-xl border border-[var(--portal-border)] bg-[var(--portal-elevated)]/50 p-4 text-secondary-premium text-[var(--portal-muted)] flex items-start gap-2.5">
                                 <Stethoscope className="mt-0.5 h-4 w-4 shrink-0 text-[#0ea5e9]" />
                                 <div>
-                                  <p className="font-semibold text-[var(--portal-text)] mb-0.5">Recommended Plan</p>
+                                  <p className="font-bold text-[var(--portal-text)] mb-0.5">Recommended Plan</p>
                                   <p className="leading-relaxed font-medium">{file.doctorNote}</p>
                                 </div>
                               </div>
@@ -247,17 +247,16 @@ export const FileHistoryPage = () => {
                               {/* Action controls */}
                               <div className="flex flex-wrap gap-2.5 pt-1">
                                 <Link to={`/app/patient/analysis/${file.id}`}>
-                                  <Button className="btn-premium-primary h-9 rounded-xl px-5 text-xs font-semibold tracking-wide">
+                                  <button className="btn-premium btn-premium-primary h-9 px-4 text-xs rounded-xl">
                                     Companion Analysis
-                                  </Button>
+                                  </button>
                                 </Link>
-                                <Button 
-                                  variant="outline" 
-                                  className="h-9 rounded-xl px-4 text-xs font-semibold tracking-wide border border-[var(--portal-border)] bg-[var(--portal-surface)] text-[var(--portal-text)] hover:bg-[var(--portal-elevated)] transition-all duration-200"
+                                <button 
+                                  className="btn-premium btn-premium-secondary h-9 px-4 text-xs rounded-xl"
                                 >
                                   <Download className="mr-1.5 h-3.5 w-3.5" />
                                   Download PDF
-                                </Button>
+                                </button>
                               </div>
 
                             </div>
