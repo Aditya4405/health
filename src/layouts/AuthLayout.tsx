@@ -10,10 +10,10 @@ export const AuthLayout = () => {
   const isSignup = location.pathname.includes('signup');
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[var(--landing-bg)] text-[var(--landing-text)] transition-colors duration-300">
+    <div className="relative min-h-screen bg-[var(--landing-bg)] text-[var(--landing-text)] transition-colors duration-300">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_12%_0%,rgba(37,99,235,0.14),transparent_45%),radial-gradient(circle_at_90%_20%,rgba(8,145,178,0.14),transparent_42%)]" />
 
-      <header className="relative z-20 border-b border-[var(--landing-border)] bg-[color-mix(in_srgb,var(--landing-bg)_88%,transparent)]">
+      <header className="sticky top-0 z-30 border-b border-[var(--landing-border)] bg-[color-mix(in_srgb,var(--landing-bg)_88%,transparent)] backdrop-blur-md">
         <div className="mx-auto flex h-[72px] w-full max-w-[1240px] items-center justify-between px-4 lg:px-8">
           <Link to="/" className="inline-flex items-center gap-3">
             <span className="relative inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[var(--landing-border)] bg-[var(--landing-surface)]">
