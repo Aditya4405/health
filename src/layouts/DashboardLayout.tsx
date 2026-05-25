@@ -43,14 +43,14 @@ export const DashboardLayout = ({ title, rightPanel, children }: DashboardLayout
             
             {/* Top Logo & Menu */}
             <div className="flex flex-col w-full">
-              <div className="flex flex-col gap-1 px-2.5">
+              <div className="flex flex-col gap-1.5 px-3">
                 <Link to="/" className="inline-flex items-center gap-2.5">
                   <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#0ea5e9] to-[#0284c7] shadow-md shadow-sky-500/10 hover:scale-[1.02] transition-transform">
                     <ActivityPulseIcon className="h-4.5 w-4.5 text-white" />
                   </span>
                   <span className="font-display text-base font-bold tracking-tight text-[var(--portal-text)]">MediScan AI</span>
                 </Link>
-                <span className="text-[10px] font-medium text-[var(--portal-muted)] mt-1.5 ml-0.5 tracking-wide">
+                <span className="text-[11px] font-semibold text-[var(--portal-muted)] mt-1 ml-0.5 tracking-wider uppercase">
                   Intelligent Health Companion
                 </span>
               </div>
@@ -107,9 +107,9 @@ export const DashboardLayout = ({ title, rightPanel, children }: DashboardLayout
                     <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-emerald-500 border-2 border-[var(--portal-surface)]" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-xs font-semibold text-[var(--portal-text)] leading-tight">{user.name}</p>
-                    <p className="text-[10px] text-[var(--portal-muted)] mt-0.5 leading-none font-medium">
-                      {roleDisplayLabel[user.role]} • <span className="text-emerald-500 font-semibold">Health synced</span>
+                    <p className="truncate text-xs font-bold text-[var(--portal-text)] leading-tight">{user.name}</p>
+                    <p className="text-[11px] text-[var(--portal-muted)] mt-1 leading-none font-semibold uppercase tracking-wider">
+                      {roleDisplayLabel[user.role]} • <span className="text-emerald-500 font-bold">Health synced</span>
                     </p>
                   </div>
                 </div>
