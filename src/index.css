@@ -43,42 +43,42 @@
   --landing-accent: #0891b2;
   --landing-shadow: 0 8px 22px rgba(15, 23, 42, 0.09);
 
-  --portal-bg: #FAF9F5;
+  --portal-bg: #f8fafc;
   --portal-surface: #ffffff;
-  --portal-elevated: #F4F3F0;
+  --portal-elevated: #f1f5f9;
   --portal-border: rgba(15, 23, 42, 0.06);
-  --portal-text: #18181b;
-  --portal-muted: #71717a;
-  --portal-shadow: 0 4px 20px -8px rgba(24, 24, 27, 0.03), 0 1px 2px rgba(24, 24, 27, 0.02);
+  --portal-text: #0f172a;
+  --portal-muted: #64748b;
+  --portal-shadow: 0 1px 2px rgba(15, 23, 42, 0.02), 0 4px 16px -4px rgba(15, 23, 42, 0.04);
   --portal-glow: none;
 }
 
 .dark {
-  --color-bg: #0A0D14;
-  --surface: #121620;
+  --color-bg: #0B1020;
+  --surface: #111827;
   --text-primary: #F4F4F5;
   --text-secondary: #A1A1AA;
-  --border-subtle: rgba(255, 255, 255, 0.06);
-  --shadow-card: 0 20px 48px rgba(0, 0, 0, 0.45);
-  --shadow-hover: 0 24px 50px rgba(0, 0, 0, 0.55);
+  --border-subtle: rgba(255, 255, 255, 0.05);
+  --shadow-card: 0 16px 36px rgba(0, 0, 0, 0.35);
+  --shadow-hover: 0 20px 48px rgba(0, 0, 0, 0.45);
 
-  --landing-bg: #0A0D14;
-  --landing-surface: #121620;
-  --landing-surface-2: #161B2B;
+  --landing-bg: #0B1020;
+  --landing-surface: #111827;
+  --landing-surface-2: #172033;
   --landing-border: rgba(255, 255, 255, 0.05);
   --landing-text: #F4F4F5;
   --landing-muted: #A1A1AA;
   --landing-primary: #3B82F6;
   --landing-accent: #06B6D4;
-  --landing-shadow: 0 20px 48px rgba(0, 0, 0, 0.45);
+  --landing-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
 
-  --portal-bg: #0A0D14;
-  --portal-surface: #121620;
-  --portal-elevated: #161B2B;
+  --portal-bg: #0B1020;
+  --portal-surface: #111827;
+  --portal-elevated: #172033;
   --portal-border: rgba(255, 255, 255, 0.05);
   --portal-text: #F4F4F5;
   --portal-muted: #A1A1AA;
-  --portal-shadow: 0 20px 48px rgba(0, 0, 0, 0.45);
+  --portal-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
   --portal-glow: none;
 }
 
@@ -271,43 +271,50 @@ h6 {
 }
 
 /* Typography Scale Refinements */
-.text-page-title {
-  font-size: clamp(1.875rem, 4vw, 2.25rem); /* 30px to 36px */
-  font-weight: 700;
+.text-display-premium {
+  font-size: 48px;
+  font-weight: 800;
   letter-spacing: -0.03em;
-  line-height: 1.15;
+  line-height: 1.1;
+}
+
+.text-page-title {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
 }
 
 .text-section-title {
-  font-size: clamp(1.25rem, 2.5vw, 1.5rem); /* 20px to 24px */
+  font-size: 24px;
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.25;
 }
 
 .text-card-title {
-  font-size: 1.125rem; /* 18px */
+  font-size: 20px;
   font-weight: 600;
   letter-spacing: -0.015em;
   line-height: 1.3;
 }
 
 .text-body-premium {
-  font-size: 0.9375rem; /* 15px */
+  font-size: 15px;
   font-weight: 500;
   letter-spacing: -0.01em;
   line-height: 1.5;
 }
 
 .text-secondary-premium {
-  font-size: 0.8125rem; /* 13px */
+  font-size: 13px;
   font-weight: 500;
   letter-spacing: -0.005em;
-  line-height: 1.45;
+  line-height: 1.4;
 }
 
 .text-label-premium {
-  font-size: 0.6875rem; /* 11px */
+  font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
