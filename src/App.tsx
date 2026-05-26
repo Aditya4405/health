@@ -13,6 +13,18 @@ const ReportAnalysisPage = lazy(() => import('@/pages/ReportAnalysisPage').then(
 const DoctorFinderPage = lazy(() => import('@/pages/DoctorFinderPage').then((module) => ({ default: module.DoctorFinderPage })));
 const ChatAssistantPage = lazy(() => import('@/pages/ChatAssistantPage').then((module) => ({ default: module.ChatAssistantPage })));
 const DoctorDashboardPage = lazy(() => import('@/pages/DoctorDashboardPage').then((module) => ({ default: module.DoctorDashboardPage })));
+const DoctorPatientsPage = lazy(() => import('@/pages/DoctorPatientsPage').then((module) => ({ default: module.DoctorPatientsPage })));
+const DoctorReportsPage = lazy(() => import('@/pages/DoctorReportsPage').then((module) => ({ default: module.DoctorReportsPage })));
+const DoctorConsultationsPage = lazy(() => import('@/pages/DoctorConsultationsPage').then((module) => ({ default: module.DoctorConsultationsPage })));
+const DoctorAssistantPage = lazy(() => import('@/pages/DoctorAssistantPage').then((module) => ({ default: module.DoctorAssistantPage })));
+const DoctorNotesPage = lazy(() => import('@/pages/DoctorNotesPage').then((module) => ({ default: module.DoctorNotesPage })));
+const DoctorSchedulePage = lazy(() => import('@/pages/DoctorSchedulePage').then((module) => ({ default: module.DoctorSchedulePage })));
+const DoctorAnalyticsPage = lazy(() => import('@/pages/DoctorAnalyticsPage').then((module) => ({ default: module.DoctorAnalyticsPage })));
+const DoctorMessagesPage = lazy(() => import('@/pages/DoctorMessagesPage').then((module) => ({ default: module.DoctorMessagesPage })));
+const DoctorSettingsPage = lazy(() => import('@/pages/DoctorSettingsPage').then((module) => ({ default: module.DoctorSettingsPage })));
+const PatientDetailViewPage = lazy(() => import('@/pages/PatientDetailViewPage').then((module) => ({ default: module.PatientDetailViewPage })));
+const DoctorAnalysisWorkspacePage = lazy(() => import('@/pages/DoctorAnalysisWorkspacePage').then((module) => ({ default: module.DoctorAnalysisWorkspacePage })));
+const ConsultationRoomPage = lazy(() => import('@/pages/ConsultationRoomPage').then((module) => ({ default: module.ConsultationRoomPage })));
 const AdminPanelPage = lazy(() => import('@/pages/AdminPanelPage').then((module) => ({ default: module.AdminPanelPage })));
 const FileHistoryPage = lazy(() => import('@/pages/FileHistoryPage').then((module) => ({ default: module.FileHistoryPage })));
 const UserSettingsPage = lazy(() => import('@/pages/UserSettingsPage').then((module) => ({ default: module.UserSettingsPage })));
@@ -38,17 +50,24 @@ function App() {
             <Route path="patient/upload" element={<UploadReportPage />} />
             <Route path="patient/analysis/:reportId" element={<ReportAnalysisPage />} />
             <Route path="patient/doctors" element={<DoctorFinderPage />} />
-            <Route path="patient/chat" element={<ChatAssistantPage />} />
+            <Route path="patient/assistant" element={<ChatAssistantPage />} />
             <Route path="patient/settings" element={<UserSettingsPage />} />
           </Route>
 
           <Route element={<ProtectedRoute allowedRoles={['DOCTOR']} />}>
             <Route path="doctor/dashboard" element={<DoctorDashboardPage />} />
-            <Route path="doctor/reports" element={<DoctorDashboardPage />} />
-            <Route path="doctor/consultations" element={<DoctorDashboardPage />} />
-            <Route path="doctor/notes" element={<DoctorDashboardPage />} />
-            <Route path="doctor/schedule" element={<DoctorDashboardPage />} />
-            <Route path="doctor/settings" element={<DoctorDashboardPage />} />
+            <Route path="doctor/patients" element={<DoctorPatientsPage />} />
+            <Route path="doctor/pending-reports" element={<DoctorReportsPage />} />
+            <Route path="doctor/consultations" element={<DoctorConsultationsPage />} />
+            <Route path="doctor/assistant" element={<DoctorAssistantPage />} />
+            <Route path="doctor/notes" element={<DoctorNotesPage />} />
+            <Route path="doctor/schedule" element={<DoctorSchedulePage />} />
+            <Route path="doctor/analytics" element={<DoctorAnalyticsPage />} />
+            <Route path="doctor/messages" element={<DoctorMessagesPage />} />
+            <Route path="doctor/settings" element={<DoctorSettingsPage />} />
+            <Route path="doctor/patient/:patientId" element={<PatientDetailViewPage />} />
+            <Route path="doctor/analysis/:reportId" element={<DoctorAnalysisWorkspacePage />} />
+            <Route path="doctor/room/:consultationId" element={<ConsultationRoomPage />} />
           </Route>
 
           <Route element={<ProtectedRoute allowedRoles={['ADMIN']} />}>
