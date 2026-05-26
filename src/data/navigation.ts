@@ -16,6 +16,7 @@ import {
   ServerCog,
   UserCheck,
   Bell,
+  MessageSquare,
 } from 'lucide-react';
 import type { Role } from '@/types';
 
@@ -30,16 +31,20 @@ export const getNavItemsByRole = (role: Role): NavItem[] => {
     { label: 'Dashboard', path: '/app/patient/dashboard', icon: LayoutDashboard },
     { label: 'Reports', path: '/app/patient/reports', icon: FileText },
     { label: 'Doctors', path: '/app/patient/doctors', icon: Search },
-    { label: 'Assistant', path: '/app/patient/chat', icon: Bot },
+    { label: 'Assistant', path: '/app/patient/assistant', icon: Bot },
     { label: 'Settings', path: '/app/patient/settings', icon: Settings },
   ];
 
   const doctorItems: NavItem[] = [
-    { label: 'My Patients', path: '/app/doctor/dashboard', icon: Users },
-    { label: 'Pending Reports', path: '/app/doctor/reports', icon: ClipboardList },
+    { label: 'Dashboard', path: '/app/doctor/dashboard', icon: LayoutDashboard },
+    { label: 'My Patients', path: '/app/doctor/patients', icon: Users },
+    { label: 'Pending Reports', path: '/app/doctor/pending-reports', icon: ClipboardList },
     { label: 'Consultations', path: '/app/doctor/consultations', icon: Calendar },
+    { label: 'AI Assistant', path: '/app/doctor/assistant', icon: Bot },
     { label: 'Notes', path: '/app/doctor/notes', icon: NotebookText },
     { label: 'Schedule', path: '/app/doctor/schedule', icon: Bell },
+    { label: 'Practice Analytics', path: '/app/doctor/analytics', icon: ChartNoAxesCombined },
+    { label: 'Messages', path: '/app/doctor/messages', icon: MessageSquare },
     { label: 'Settings', path: '/app/doctor/settings', icon: Settings },
   ];
 
