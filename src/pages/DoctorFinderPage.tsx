@@ -5,6 +5,7 @@ import { DashboardLayout } from '@/layouts/DashboardLayout';
 import { PageTransition } from '@/components/common/PageTransition';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
 import { doctorService, type Doctor } from '@/services/doctorService';
 import { useDebounce } from '@/hooks/useDebounce';
 import { usePageTitle } from '@/hooks/usePageTitle';
@@ -31,6 +32,33 @@ export const DoctorFinderPage = () => {
   const [sortBy, setSortBy] = useState<'Relevance' | 'Rating' | 'Distance' | 'Availability'>('Relevance');
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
+  const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
+  const [bookingLoading, setBookingLoading] = useState(false);
+
+  const handleConfirmBooking = async () => {
+    if (!selectedSlot) {
+      toast.error('Please select an appointment slot first.');
+      return;
+    }
+    
+    setBookingLoading(true);
+    toast.promise(
+      new Promise((resolve) => setTimeout(resolve, 1500)),
+      {
+        loading: `Booking appointment with ${selectedDoctor?.name} for ${selectedSlot}...`,
+        success: () => {
+          setBookingLoading(false);
+          setSelectedDoctor(null);
+          setSelectedSlot(null);
+          return `Appointment confirmed with ${selectedDoctor?.name}!`;
+        },
+        error: () => {
+          setBookingLoading(false);
+          return 'Failed to book slot. Please try again.';
+        }
+      }
+    );
+  };
 
   const debouncedQuery = useDebounce(query, 300);
 
@@ -240,6 +268,10 @@ export const DoctorFinderPage = () => {
                       </button>
                       <button
                         className="btn-premium btn-premium-primary h-9 text-xs rounded-xl"
+                        onClick={() => {
+                          setSelectedDoctor(doctor);
+                          setSelectedSlot('10:00 AM'); // Pre-select default slot
+                        }}
                       >
                         Book Slot
                       </button>
@@ -260,7 +292,12 @@ export const DoctorFinderPage = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 className="fixed inset-0 z-40 bg-[var(--portal-bg)]/60 backdrop-blur-sm"
-                onClick={() => setSelectedDoctor(null)}
+                onClick={() => {
+                  if (!bookingLoading) {
+                    setSelectedDoctor(null);
+                    setSelectedSlot(null);
+                  }
+                }}
               />
               <motion.aside
                 initial={{ x: 440 }}
@@ -271,7 +308,15 @@ export const DoctorFinderPage = () => {
               >
                 <div className="flex items-center justify-between border-b border-[var(--portal-border)] pb-4">
                   <h3 className="text-card-title font-bold tracking-tight">{selectedDoctor.name}</h3>
-                  <button onClick={() => setSelectedDoctor(null)} className="h-8 w-8 flex items-center justify-center rounded-full text-[var(--portal-muted)] hover:text-[var(--portal-text)] hover:bg-[var(--portal-elevated)] transition-colors">
+                  <button 
+                    onClick={() => {
+                      if (!bookingLoading) {
+                        setSelectedDoctor(null);
+                        setSelectedSlot(null);
+                      }
+                    }} 
+                    className="h-8 w-8 flex items-center justify-center rounded-full text-[var(--portal-muted)] hover:text-[var(--portal-text)] hover:bg-[var(--portal-elevated)] transition-colors"
+                  >
                     <X className="h-5 w-5" />
                   </button>
                 </div>
@@ -294,11 +339,25 @@ export const DoctorFinderPage = () => {
                   <div>
                     <p className="mb-2.5 text-label-premium text-[var(--portal-muted)]">Select Appointment Slot</p>
                     <div className="grid grid-cols-3 gap-2">
-                      {['10:00 AM', '11:30 AM', '2:00 PM', '4:30 PM', '6:00 PM', '7:30 PM'].map((slot) => (
-                        <button key={slot} type="button" className="focus-ring h-[38px] flex items-center justify-center rounded-xl border border-[var(--portal-border)] bg-[var(--portal-surface)] hover:bg-[var(--portal-elevated)] px-2 text-xs font-semibold text-[var(--portal-text)] transition-all">
-                          {slot}
-                        </button>
-                      ))}
+                      {['10:00 AM', '11:30 AM', '2:00 PM', '4:30 PM', '6:00 PM', '7:30 PM'].map((slot) => {
+                        const isActive = selectedSlot === slot;
+                        return (
+                          <button 
+                            key={slot} 
+                            type="button" 
+                            disabled={bookingLoading}
+                            onClick={() => setSelectedSlot(slot)}
+                            className={cn(
+                              "focus-ring h-[38px] flex items-center justify-center rounded-xl border px-2 text-xs font-semibold transition-all duration-150",
+                              isActive
+                                ? "bg-[#0ea5e9]/10 border-[#0ea5e9]/30 text-[#0ea5e9] shadow-sm shadow-[#0ea5e9]/5"
+                                : "border-[var(--portal-border)] bg-[var(--portal-surface)] hover:bg-[var(--portal-elevated)] text-[var(--portal-text)]"
+                            )}
+                          >
+                            {slot}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
 
@@ -309,9 +368,11 @@ export const DoctorFinderPage = () => {
                   </div>
 
                   <button
-                    className="btn-premium btn-premium-primary w-full"
+                    onClick={handleConfirmBooking}
+                    disabled={bookingLoading}
+                    className="btn-premium btn-premium-primary w-full disabled:opacity-50"
                   >
-                    Confirm Appointment Bookings
+                    {bookingLoading ? 'Confirming...' : 'Confirm Appointment Bookings'}
                   </button>
                 </div>
               </motion.aside>
