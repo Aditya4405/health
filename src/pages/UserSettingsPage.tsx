@@ -10,12 +10,55 @@ import { useTheme } from '@/context/ThemeContext';
 import { useAuth } from '@/context/AuthContext';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { cn } from '@/utils/cn';
+import { toast } from 'sonner';
 
 export const UserSettingsPage = () => {
   usePageTitle('Settings');
   const { theme, toggleTheme } = useTheme();
   const { user, updateUser } = useAuth();
   const [uploading, setUploading] = useState(false);
+
+  const [name, setName] = useState(user?.name ?? 'Aarav Kapoor');
+  const [email, setEmail] = useState('patient@mediscan.ai');
+  const [phone, setPhone] = useState('+91 98765 43210');
+  const [saveLoading, setSaveLoading] = useState(false);
+
+  const handleSave = () => {
+    setSaveLoading(true);
+    toast.promise(
+      new Promise((resolve) => setTimeout(resolve, 1200)),
+      {
+        loading: 'Saving profile updates...',
+        success: () => {
+          updateUser({ name });
+          setSaveLoading(false);
+          return 'Profile updated successfully!';
+        },
+        error: () => {
+          setSaveLoading(false);
+          return 'Failed to save changes.';
+        }
+      }
+    );
+  };
+
+  const handleCancel = () => {
+    setName(user?.name ?? 'Aarav Kapoor');
+    setEmail('patient@mediscan.ai');
+    setPhone('+91 98765 43210');
+    toast.info('Changes reverted.');
+  };
+
+  const handleBillingAction = (action: 'change' | 'manage') => {
+    toast.promise(
+      new Promise((resolve) => setTimeout(resolve, 1000)),
+      {
+        loading: action === 'change' ? 'Opening Plan Configurator...' : 'Redirecting to Stripe Billing Portal...',
+        success: action === 'change' ? 'Plan updated to MediScan Premium!' : 'Redirected successfully!',
+        error: 'Failed to access billing.',
+      }
+    );
+  };
 
   const processFile = (file: File) => {
     if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
@@ -122,23 +165,23 @@ export const UserSettingsPage = () => {
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-1">
                   <label className="text-label-premium text-[var(--portal-muted)] ml-1">Full Name</label>
-                  <input placeholder="Full name" defaultValue={user?.name ?? 'Aarav Kapoor'} className="input-premium w-full" />
+                  <input placeholder="Full name" value={name} onChange={(e) => setName(e.target.value)} className="input-premium w-full" />
                 </div>
                 <div className="space-y-1">
                   <label className="text-label-premium text-[var(--portal-muted)] ml-1">Email Address</label>
-                  <input placeholder="Email" defaultValue="patient@mediscan.ai" className="input-premium w-full" />
+                  <input placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="input-premium w-full" />
                 </div>
                 <div className="space-y-1 sm:col-span-2">
                   <label className="text-label-premium text-[var(--portal-muted)] ml-1">Phone Number</label>
-                  <input placeholder="Phone" defaultValue="+91 98765 43210" className="input-premium w-full" />
+                  <input placeholder="Phone" value={phone} onChange={(e) => setPhone(e.target.value)} className="input-premium w-full" />
                 </div>
               </div>
 
               <div className="pt-2 flex gap-3">
-                <button className="btn-premium btn-premium-primary">
-                  Save Changes
+                <button onClick={handleSave} disabled={saveLoading} className="btn-premium btn-premium-primary disabled:opacity-50">
+                  {saveLoading ? 'Saving...' : 'Save Changes'}
                 </button>
-                <button className="btn-premium btn-premium-secondary">
+                <button onClick={handleCancel} disabled={saveLoading} className="btn-premium btn-premium-secondary">
                   Cancel
                 </button>
               </div>
@@ -172,9 +215,9 @@ export const UserSettingsPage = () => {
                 <h3 className="text-card-title text-[var(--portal-text)] font-bold">System Alerts</h3>
               </div>
               <div className="divide-y divide-[var(--portal-border)]">
-                <SettingRow label="Critical health indicators" description="Alerts for critical biomarker variances." />
-                <SettingRow label="Analysis completions" description="Get notified when AI interpretations are ready." defaultChecked />
-                <SettingRow label="Consultation nudges" description="Appointment confirmation and follow-up prompts." defaultChecked />
+                <SettingRow label="Critical health indicators" description="Alerts for critical biomarker variances." prefKey="pref_health_indicators" />
+                <SettingRow label="Analysis completions" description="Get notified when AI interpretations are ready." prefKey="pref_analysis_completions" defaultChecked />
+                <SettingRow label="Consultation nudges" description="Appointment confirmation and follow-up prompts." prefKey="pref_consultation_nudges" defaultChecked />
               </div>
             </article>
 
@@ -189,6 +232,7 @@ export const UserSettingsPage = () => {
                   icon={UserCircle2}
                   title="Two-factor authentication"
                   body="Secure account entry using verification codes."
+                  prefKey="pref_2fa"
                 />
                 <SecurityRowItem
                   icon={MoonStar}
@@ -217,9 +261,9 @@ export const UserSettingsPage = () => {
                 <h3 className="text-card-title text-[var(--portal-text)] font-bold">AI Personalization</h3>
               </div>
               <div className="divide-y divide-[var(--portal-border)]">
-                <SettingRow label="Detailed medical contexts" description="Include clinical insights in AI explanations." defaultChecked />
-                <SettingRow label="Lifestyle-first recommendations" description="Prioritize nutrition guidance over clinical targets." defaultChecked />
-                <SettingRow label="Timing smart nudges" description="Smart reminders synchronized with biological clock." />
+                <SettingRow label="Detailed medical contexts" description="Include clinical insights in AI explanations." prefKey="pref_medical_contexts" defaultChecked />
+                <SettingRow label="Lifestyle-first recommendations" description="Prioritize nutrition guidance over clinical targets." prefKey="pref_lifestyle_first" defaultChecked />
+                <SettingRow label="Timing smart nudges" description="Smart reminders synchronized with biological clock." prefKey="pref_timing_nudges" />
               </div>
             </article>
 
@@ -245,10 +289,10 @@ export const UserSettingsPage = () => {
               </div>
 
               <div className="mt-6 flex gap-2">
-                <button className="btn-premium btn-premium-secondary w-full text-[11px] h-9 px-3">
+                <button onClick={() => handleBillingAction('change')} className="btn-premium btn-premium-secondary w-full text-[11px] h-9 px-3">
                   Change Plan
                 </button>
-                <button className="btn-premium btn-premium-secondary w-full text-[11px] h-9 px-3">
+                <button onClick={() => handleBillingAction('manage')} className="btn-premium btn-premium-secondary w-full text-[11px] h-9 px-3">
                   Manage Billing
                 </button>
               </div>
@@ -274,35 +318,68 @@ const CompletionRing = ({ progress }: { progress: number }) => (
   </div>
 );
 
-const SettingRow = ({ label, description, defaultChecked = false }: { label: string; description: string; defaultChecked?: boolean }) => (
-  <div className="flex items-center justify-between gap-3 py-3.5 first:pt-1 last:pb-1">
-    <div className="space-y-0.5">
-      <p className="text-body-premium font-semibold text-[var(--portal-text)]">{label}</p>
-      <p className="text-secondary-premium text-[var(--portal-muted)]">{description}</p>
+const SettingRow = ({ label, description, prefKey, defaultChecked = false }: { label: string; description: string; prefKey: string; defaultChecked?: boolean }) => {
+  const [checked, setChecked] = useState(() => {
+    const saved = localStorage.getItem(prefKey);
+    return saved !== null ? saved === 'true' : defaultChecked;
+  });
+
+  const handleToggle = (val: boolean) => {
+    setChecked(val);
+    localStorage.setItem(prefKey, String(val));
+    toast.success(`${label} preference ${val ? 'enabled' : 'disabled'}.`);
+  };
+
+  return (
+    <div className="flex items-center justify-between gap-3 py-3.5 first:pt-1 last:pb-1">
+      <div className="space-y-0.5">
+        <p className="text-body-premium font-semibold text-[var(--portal-text)]">{label}</p>
+        <p className="text-secondary-premium text-[var(--portal-muted)]">{description}</p>
+      </div>
+      <Switch checked={checked} onCheckedChange={handleToggle} className="data-[state=checked]:bg-[#0ea5e9]" />
     </div>
-    <Switch defaultChecked={defaultChecked} className="data-[state=checked]:bg-[#0ea5e9]" />
-  </div>
-);
+  );
+};
 
 const SecurityRowItem = ({
   icon: Icon,
   title,
   body,
+  prefKey,
+  defaultChecked = false,
   action,
 }: {
   icon: typeof ShieldCheck;
   title: string;
   body: string;
+  prefKey?: string;
+  defaultChecked?: boolean;
   action?: ReactNode;
-}) => (
-  <div className="flex items-center justify-between gap-3 py-3.5 first:pt-1 last:pb-1">
-    <div className="flex items-start gap-2.5">
-      <Icon className="h-4.5 w-4.5 mt-0.5 text-[#0ea5e9]" />
-      <div className="space-y-0.5">
-        <p className="text-body-premium font-semibold text-[var(--portal-text)]">{title}</p>
-        <p className="text-secondary-premium text-[var(--portal-muted)]">{body}</p>
+}) => {
+  const [checked, setChecked] = useState(() => {
+    if (!prefKey) return defaultChecked;
+    const saved = localStorage.getItem(prefKey);
+    return saved !== null ? saved === 'true' : defaultChecked;
+  });
+
+  const handleToggle = (val: boolean) => {
+    setChecked(val);
+    if (prefKey) {
+      localStorage.setItem(prefKey, String(val));
+      toast.success(`${title} ${val ? 'activated' : 'deactivated'}.`);
+    }
+  };
+
+  return (
+    <div className="flex items-center justify-between gap-3 py-3.5 first:pt-1 last:pb-1">
+      <div className="flex items-start gap-2.5">
+        <Icon className="h-4.5 w-4.5 mt-0.5 text-[#0ea5e9]" />
+        <div className="space-y-0.5">
+          <p className="text-body-premium font-semibold text-[var(--portal-text)]">{title}</p>
+          <p className="text-secondary-premium text-[var(--portal-muted)]">{body}</p>
+        </div>
       </div>
+      {action ?? <Switch checked={checked} onCheckedChange={handleToggle} className="data-[state=checked]:bg-[#0ea5e9]" />}
     </div>
-    {action ?? <Switch className="data-[state=checked]:bg-[#0ea5e9]" />}
-  </div>
-);
+  );
+};
