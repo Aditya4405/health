@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { cn } from '@/utils/cn';
+import { toast } from 'sonner';
 
 const files = [
   {
@@ -76,6 +77,17 @@ export const FileHistoryPage = () => {
   usePageTitle('Reports');
   const [searchTerm, setSearchTerm] = useState('');
   const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  const handleDownloadPDF = (fileName: string) => {
+    toast.promise(
+      new Promise((resolve) => setTimeout(resolve, 1500)),
+      {
+        loading: `Generating PDF for ${fileName}...`,
+        success: 'PDF downloaded successfully!',
+        error: 'Failed to generate PDF.',
+      }
+    );
+  };
 
   const filteredFiles = files.filter(file => 
     file.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -252,6 +264,7 @@ export const FileHistoryPage = () => {
                                   </button>
                                 </Link>
                                 <button 
+                                  onClick={() => handleDownloadPDF(file.name)}
                                   className="btn-premium btn-premium-secondary h-9 px-4 text-xs rounded-xl"
                                 >
                                   <Download className="mr-1.5 h-3.5 w-3.5" />
