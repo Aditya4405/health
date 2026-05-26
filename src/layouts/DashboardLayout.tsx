@@ -1,4 +1,4 @@
-import { Bell, LogOut, Menu, Search as SearchIcon, Sparkles, X } from 'lucide-react';
+import { Bell, LogOut, Menu, Search as SearchIcon, Sparkles, X, Bot, ClipboardList, Calendar } from 'lucide-react';
 import { useMemo, useState, type ReactNode } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -9,7 +9,7 @@ import { ThemeToggle } from '@/components/common/ThemeToggle';
 import { NotificationsPanel } from '@/components/common/NotificationsPanel';
 import { useAuth } from '@/context/AuthContext';
 import { useNotifications } from '@/context/NotificationContext';
-import { getNavItemsByRole, roleDisplayLabel, userAvatarBgByRole } from '@/data/navigation';
+import { getNavItemsByRole, roleDisplayLabel, userAvatarBgByRole, NavItem } from '@/data/navigation';
 import { cn } from '@/utils/cn';
 
 interface DashboardLayoutProps {
@@ -34,17 +34,54 @@ export const DashboardLayout = ({ title, rightPanel, children }: DashboardLayout
     navigate('/login');
   };
 
+  const renderNavItem = (item: NavItem, isMobile = false) => (
+    <NavLink
+      key={item.path}
+      to={item.path}
+      onClick={() => {
+        if (isMobile) setMobileMenuOpen(false);
+      }}
+      className={({ isActive }) =>
+        cn(
+          'nav-item-premium group',
+          isActive && 'nav-item-active-premium'
+        )
+      }
+    >
+      {({ isActive }) => (
+        <>
+          {isActive && (
+            <span className="nav-item-active-indicator" />
+          )}
+          <item.icon className={cn(
+            "h-5 w-5 shrink-0 transition-all duration-200 group-hover:scale-105",
+            isActive ? "text-[#0ea5e9] dark:text-[#38bdf8]" : "text-[var(--portal-muted)] group-hover:text-[var(--portal-text)]"
+          )} />
+          <span className={cn(
+            "transition-all duration-200",
+            isActive ? "text-[#0ea5e9] dark:text-[#38bdf8]" : "text-[var(--portal-muted)] group-hover:text-[var(--portal-text)]"
+          )}>
+            {item.label}
+          </span>
+        </>
+      )}
+    </NavLink>
+  );
+
   const isPatient = user.role === 'PATIENT';
   return (
     <div className="relative min-h-screen portal-app-bg text-[var(--portal-text)] transition-colors duration-300">
       <div className="flex min-h-screen">
         
         {/* Sidebar Dock */}
-        <aside className="hidden shrink-0 w-[275px] sidebar-premium-bg lg:block relative border-r border-[var(--portal-border)] rounded-r-[24px]">
+        <aside className={cn(
+          "hidden shrink-0 sidebar-premium-bg lg:block relative border-r border-[var(--portal-border)] rounded-r-[24px]",
+          user.role === 'DOCTOR' ? "w-[280px]" : "w-[275px]"
+        )}>
           <div className="sticky top-0 flex h-screen flex-col justify-between p-5 rounded-r-[24px] overflow-hidden">
             
             {/* Top Logo & Menu */}
-            <div className="flex flex-col w-full">
+            <div className="flex flex-col w-full animate-in fade-in slide-in-from-left duration-300 shrink-0">
               <div className="flex flex-col gap-1.5 px-3">
                 <Link to="/" className="inline-flex items-center gap-2.5">
                   <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#0ea5e9] to-[#0284c7] shadow-md shadow-sky-500/10 hover:scale-[1.02] transition-transform">
@@ -53,46 +90,68 @@ export const DashboardLayout = ({ title, rightPanel, children }: DashboardLayout
                   <span className="font-display text-base font-bold tracking-tight text-[var(--portal-text)]">MediScan AI</span>
                 </Link>
                 <span className="text-[11px] font-semibold text-[var(--portal-muted)] mt-1 ml-0.5 tracking-wider uppercase">
-                  Intelligent Health Companion
+                  {user.role === 'DOCTOR' ? 'Clinical Operating System' : 'Intelligent Health Companion'}
                 </span>
               </div>
 
-              <nav className="flex flex-col gap-2.5 w-full mt-8">
-                {navItems.map((item) => (
-                  <NavLink
-                    key={item.path}
-                    to={item.path}
-                    className={({ isActive }) =>
-                      cn(
-                        'nav-item-premium group',
-                        isActive && 'nav-item-active-premium'
-                      )
-                    }
-                  >
-                    {({ isActive }) => (
-                      <>
-                        {isActive && (
-                          <span className="nav-item-active-indicator" />
-                        )}
-                        <item.icon className={cn(
-                          "h-5 w-5 shrink-0 transition-all duration-200 group-hover:scale-105",
-                          isActive ? "text-[#0ea5e9] dark:text-[#38bdf8]" : "text-[var(--portal-muted)] group-hover:text-[var(--portal-text)]"
-                        )} />
-                        <span className={cn(
-                          "transition-all duration-200",
-                          isActive ? "text-[#0ea5e9] dark:text-[#38bdf8]" : "text-[var(--portal-muted)] group-hover:text-[var(--portal-text)]"
-                        )}>
-                          {item.label}
-                        </span>
-                      </>
-                    )}
-                  </NavLink>
-                ))}
+              {/* Doctor Quick Workspace */}
+              {user.role === 'DOCTOR' && (
+                <div className="px-3 mt-5">
+                  <div className="rounded-xl border border-[var(--portal-border)] bg-[var(--portal-elevated)]/40 p-3 space-y-2">
+                    <p className="text-[9px] font-bold text-[var(--portal-muted)] uppercase tracking-wider">Clinical Workspace Hub</p>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Link 
+                        to="/app/doctor/pending-reports" 
+                        className="flex flex-col items-center justify-center p-2.5 rounded-lg bg-[var(--portal-surface)] border border-[var(--portal-border)] hover:border-[#0ea5e9]/40 hover:bg-[#0ea5e9]/5 transition-all text-center group"
+                      >
+                        <ClipboardList className="h-4.5 w-4.5 text-[#0ea5e9] mb-1.5 group-hover:scale-110 transition-transform" />
+                        <span className="text-[10px] font-bold text-[var(--portal-text)]">Triage</span>
+                      </Link>
+                      <Link 
+                        to="/app/doctor/consultations" 
+                        className="flex flex-col items-center justify-center p-2.5 rounded-lg bg-[var(--portal-surface)] border border-[var(--portal-border)] hover:border-[#0ea5e9]/40 hover:bg-[#0ea5e9]/5 transition-all text-center group"
+                      >
+                        <Calendar className="h-4.5 w-4.5 text-emerald-500 mb-1.5 group-hover:scale-110 transition-transform" />
+                        <span className="text-[10px] font-bold text-[var(--portal-text)]">Consults</span>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Navigation container - Scrollable */}
+            <div className="flex-1 overflow-y-auto hide-scrollbar my-4 py-1 px-0.5 w-full">
+              <nav className="flex flex-col gap-2.5 w-full">
+                {user.role === 'DOCTOR' ? (
+                  <div className="space-y-5">
+                    <div>
+                      <p className="px-3 text-[10px] font-bold text-[var(--portal-muted)]/60 uppercase tracking-wider mb-2">Clinical Core</p>
+                      <div className="space-y-1">
+                        {navItems.slice(0, 4).map((item) => renderNavItem(item))}
+                      </div>
+                    </div>
+                    <div>
+                      <p className="px-3 text-[10px] font-bold text-[var(--portal-muted)]/60 uppercase tracking-wider mb-2">Intelligence Tools</p>
+                      <div className="space-y-1">
+                        {navItems.slice(4, 8).map((item) => renderNavItem(item))}
+                      </div>
+                    </div>
+                    <div>
+                      <p className="px-3 text-[10px] font-bold text-[var(--portal-muted)]/60 uppercase tracking-wider mb-2">Support & Admin</p>
+                      <div className="space-y-1">
+                        {navItems.slice(8).map((item) => renderNavItem(item))}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  navItems.map((item) => renderNavItem(item))
+                )}
               </nav>
             </div>
 
             {/* Bottom Profile & Logout */}
-            <div className="flex flex-col gap-4 w-full px-1">
+            <div className="flex flex-col gap-4 w-full px-1 shrink-0 pt-4 border-t border-[var(--portal-border)]">
               {/* Profile Card Container */}
               <div className="profile-card-premium flex items-center justify-between gap-3 hover:scale-[1.01] transition-transform duration-200">
                 <div className="flex items-center gap-2.5 min-w-0">
@@ -110,8 +169,9 @@ export const DashboardLayout = ({ title, rightPanel, children }: DashboardLayout
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-xs font-bold text-[var(--portal-text)] leading-tight">{user.name}</p>
-                    <p className="text-[11px] text-[var(--portal-muted)] mt-1 leading-none font-semibold uppercase tracking-wider">
-                      {roleDisplayLabel[user.role]} • <span className="text-emerald-500 font-bold">Health synced</span>
+                    <p className="text-[10px] text-[var(--portal-muted)] mt-1.5 leading-none font-bold uppercase tracking-wider flex items-center gap-1">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      {user.role === 'DOCTOR' ? `${user.specialty ?? 'Cardiologist'}` : `${roleDisplayLabel[user.role]} • Synced`}
                     </p>
                   </div>
                 </div>
@@ -147,12 +207,56 @@ export const DashboardLayout = ({ title, rightPanel, children }: DashboardLayout
                   {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
                 </Button>
 
-                <div className="min-w-0">
-                  <h1 className="truncate font-display text-sm font-bold tracking-tight text-[var(--portal-text)]">{title ?? 'Portal'}</h1>
-                </div>
+                {user.role === 'DOCTOR' ? (
+                  <div className="hidden md:flex items-center gap-2 bg-[var(--portal-elevated)] border border-[var(--portal-border)] rounded-full px-3.5 py-1.5 w-72 lg:w-96 text-[var(--portal-muted)] focus-within:border-[#0ea5e9]/50 transition-all">
+                    <SearchIcon className="h-3.5 w-3.5 shrink-0" />
+                    <input 
+                      type="text" 
+                      placeholder="Search patients, biomarkers, ICD-10 codes..." 
+                      className="bg-transparent border-none outline-none text-xs w-full text-[var(--portal-text)] placeholder-[var(--portal-muted)] font-medium"
+                    />
+                  </div>
+                ) : (
+                  <div className="min-w-0">
+                    <h1 className="truncate font-display text-sm font-bold tracking-tight text-[var(--portal-text)]">{title ?? 'Portal'}</h1>
+                  </div>
+                )}
               </div>
 
               <div className="flex items-center gap-3">
+                {user.role === 'DOCTOR' && (
+                  <>
+                    {/* Emergency Alerts Indicator */}
+                    <Link 
+                      to="/app/doctor/dashboard"
+                      className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-danger/10 border border-danger/20 text-danger text-[10px] font-bold uppercase tracking-wider animate-pulse"
+                      title="Clinical Alerts"
+                    >
+                      <span className="h-1.5 w-1.5 rounded-full bg-danger" />
+                      2 Alerts
+                    </Link>
+
+                    {/* Today's Schedule Badge */}
+                    <Link 
+                      to="/app/doctor/schedule"
+                      className="hidden md:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[10px] font-bold uppercase tracking-wider"
+                      title="Appointments remaining today"
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                      3 remaining
+                    </Link>
+
+                    {/* AI Clinical Companion shortcut */}
+                    <Link 
+                      to="/app/doctor/assistant"
+                      className="h-8 w-8 rounded-lg border border-[var(--portal-border)] bg-[var(--portal-surface)] flex items-center justify-center text-[var(--portal-muted)] hover:text-[#0ea5e9] hover:border-[#0ea5e9]/40 hover:bg-[#0ea5e9]/5 transition-colors"
+                      title="Launch AI Clinical Assistant"
+                    >
+                      <Bot className="h-4 w-4" />
+                    </Link>
+                  </>
+                )}
+
                 <ThemeToggle />
                 
                 <div className="relative">
@@ -223,29 +327,30 @@ export const DashboardLayout = ({ title, rightPanel, children }: DashboardLayout
                     </div>
 
                     <nav className="flex flex-col gap-2 w-full">
-                      {navItems.map((item) => (
-                        <NavLink
-                          key={item.path}
-                          to={item.path}
-                          onClick={() => setMobileMenuOpen(false)}
-                          className={({ isActive }) =>
-                            cn(
-                              'nav-item-premium group',
-                              isActive && 'nav-item-active-premium'
-                            )
-                          }
-                        >
-                          {({ isActive }) => (
-                            <>
-                              {isActive && (
-                                <span className="nav-item-active-indicator" />
-                              )}
-                              <item.icon className="h-5 w-5 shrink-0" />
-                              <span>{item.label}</span>
-                            </>
-                          )}
-                        </NavLink>
-                      ))}
+                      {user.role === 'DOCTOR' ? (
+                        <div className="space-y-4">
+                          <div>
+                            <p className="px-3 text-[9px] font-bold text-[var(--portal-muted)]/60 uppercase tracking-wider mb-1.5">Clinical Core</p>
+                            <div className="space-y-0.5">
+                              {navItems.slice(0, 4).map((item) => renderNavItem(item, true))}
+                            </div>
+                          </div>
+                          <div>
+                            <p className="px-3 text-[9px] font-bold text-[var(--portal-muted)]/60 uppercase tracking-wider mb-1.5">Intelligence Tools</p>
+                            <div className="space-y-0.5">
+                              {navItems.slice(4, 8).map((item) => renderNavItem(item, true))}
+                            </div>
+                          </div>
+                          <div>
+                            <p className="px-3 text-[9px] font-bold text-[var(--portal-muted)]/60 uppercase tracking-wider mb-1.5">Support & Admin</p>
+                            <div className="space-y-0.5">
+                              {navItems.slice(8).map((item) => renderNavItem(item, true))}
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        navItems.map((item) => renderNavItem(item, true))
+                      )}
                     </nav>
                   </div>
 
