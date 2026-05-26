@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
+import { NotificationsPanel } from '@/components/common/NotificationsPanel';
 import { useAuth } from '@/context/AuthContext';
 import { useNotifications } from '@/context/NotificationContext';
 import { getNavItemsByRole, roleDisplayLabel, userAvatarBgByRole } from '@/data/navigation';
@@ -19,6 +20,7 @@ interface DashboardLayoutProps {
 
 export const DashboardLayout = ({ title, rightPanel, children }: DashboardLayoutProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
@@ -153,12 +155,39 @@ export const DashboardLayout = ({ title, rightPanel, children }: DashboardLayout
               <div className="flex items-center gap-3">
                 <ThemeToggle />
                 
-                <Button size="icon" variant="ghost" className="relative h-8 w-8 rounded-lg border border-[var(--portal-border)] bg-[var(--portal-surface)]" aria-label="Notifications">
-                  <Bell className="h-4 w-4" />
-                  {unreadCount > 0 && (
-                    <span className="absolute right-1.5 top-1.5 inline-flex h-2 w-2 rounded-full bg-red-500 animate-pulse" />
-                  )}
-                </Button>
+                <div className="relative">
+                  <button 
+                    onClick={() => setShowNotifications((prev) => !prev)}
+                    className="relative flex items-center justify-center h-8 w-8 rounded-lg border border-[var(--portal-border)] bg-[var(--portal-surface)] hover:bg-[var(--portal-elevated)] transition-colors text-[var(--portal-text)]" 
+                    aria-label="Notifications"
+                  >
+                    <Bell className="h-4 w-4" />
+                    {unreadCount > 0 && (
+                      <span className="absolute right-1.5 top-1.5 inline-flex h-2 w-2 rounded-full bg-red-500 animate-pulse" />
+                    )}
+                  </button>
+
+                  <AnimatePresence>
+                    {showNotifications && (
+                      <>
+                        {/* Invisible backdrop to dismiss dropdown on click outside */}
+                        <div 
+                          className="fixed inset-0 z-40" 
+                          onClick={() => setShowNotifications(false)} 
+                        />
+                        <motion.div 
+                          initial={{ opacity: 0, y: -8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -8 }}
+                          transition={{ duration: 0.15, ease: 'easeOut' }}
+                          className="absolute right-0 mt-2.5 w-80 sm:w-[380px] z-50 shadow-2xl"
+                        >
+                          <NotificationsPanel />
+                        </motion.div>
+                      </>
+                    )}
+                  </AnimatePresence>
+                </div>
               </div>
             </div>
           </header>
