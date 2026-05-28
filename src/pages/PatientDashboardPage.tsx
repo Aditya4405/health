@@ -101,7 +101,7 @@ export const PatientDashboardPage = () => {
                     Upload Lab Results
                   </button>
                 </Link>
-                <Link to="/app/patient/chat">
+                <Link to="/app/patient/assistant">
                   <button className="btn-premium btn-premium-secondary">
                     Consult Companion AI
                   </button>
