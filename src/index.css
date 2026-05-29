@@ -246,7 +246,7 @@ h6 {
 .app-card {
   background: var(--portal-surface);
   border: 1px solid var(--portal-border);
-  border-radius: 24px; /* Soft & Breathable, Stripe/Notion style */
+  border-radius: 16px; /* Optimized premium card radius */
   box-shadow: var(--portal-shadow);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -256,12 +256,27 @@ h6 {
   border-color: color-mix(in_srgb, var(--portal-text) 12%, var(--portal-border));
 }
 
-.dark .app-card-hover:hover {
-  border-color: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.6);
+.dark .app-card {
+  background: linear-gradient(180deg, rgba(20, 27, 45, 0.95), rgba(12, 18, 32, 0.95));
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.02); /* Border usage reduced by 70% */
 }
 
-/* Controlled Spacing & Tighter Typography Scaling */
+.dark .app-card-hover:hover {
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Strict Spacing System */
+.portal-container {
+  max-width: 1600px;
+  margin-inline: auto;
+  padding-inline: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
 .tracking-tight-premium {
   letter-spacing: -0.02em;
 }
@@ -272,7 +287,7 @@ h6 {
 
 /* Typography Scale Refinements */
 .text-display-premium {
-  font-size: 48px;
+  font-size: 40px;
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1.1;
@@ -293,7 +308,7 @@ h6 {
 }
 
 .text-card-title {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
   letter-spacing: -0.015em;
   line-height: 1.3;
@@ -301,20 +316,20 @@ h6 {
 
 .text-body-premium {
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: -0.01em;
   line-height: 1.5;
 }
 
 .text-secondary-premium {
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: -0.005em;
   line-height: 1.4;
 }
 
 .text-label-premium {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -437,7 +452,7 @@ h6 {
 }
 
 .nav-item-premium {
-  height: 52px;
+  height: 42px;
   padding: 0 16px;
   border-radius: 12px;
   display: flex;
