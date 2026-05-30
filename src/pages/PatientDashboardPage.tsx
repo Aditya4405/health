@@ -175,9 +175,10 @@ export const PatientDashboardPage = () => {
 
               <div className="space-y-2.5">
                 {recentReports.map((report) => (
-                  <div
+                  <Link
                     key={report.id}
-                    className="app-card app-card-hover p-4 flex items-center justify-between transition-all duration-200"
+                    to={`/app/patient/analysis/${report.id}`}
+                    className="app-card app-card-hover p-4 flex items-center justify-between transition-all duration-200 block"
                   >
                     <div className="flex items-center gap-3">
                       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[var(--portal-elevated)] border border-[var(--portal-border)] text-[#0ea5e9]">
@@ -208,7 +209,7 @@ export const PatientDashboardPage = () => {
                         {report.statusText}
                       </span>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             </article>
